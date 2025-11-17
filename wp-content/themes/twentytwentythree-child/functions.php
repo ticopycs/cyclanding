@@ -792,3 +792,19 @@ function cyc_child_load_homepage_from_file($content) {
 }
 // Prioridad alta para ejecutar antes de otros filtros
 add_filter('the_content', 'cyc_child_load_homepage_from_file', 1);
+
+/**
+ * Desactivar wpautop en la página de inicio para preservar el HTML del carousel
+ * Esto es crítico para que el carousel funcione correctamente
+ */
+function cyc_child_disable_wpautop_on_homepage($content) {
+    // Solo en la página de inicio
+    if (is_front_page() || is_home()) {
+        // Remover wpautop que puede romper la estructura del HTML
+        remove_filter('the_content', 'wpautop');
+        remove_filter('the_content', 'wptexturize');
+    }
+    return $content;
+}
+// Ejecutar muy temprano para desactivar wpautop antes de que se aplique
+add_filter('the_content', 'cyc_child_disable_wpautop_on_homepage', 0);

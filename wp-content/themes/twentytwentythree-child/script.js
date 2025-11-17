@@ -530,48 +530,90 @@
 
     if (!track) return;
 
-    // Obtener SOLO los hijos directos del track (no buscar recursivamente)
-    // Esto evita encontrar tarjetas anidadas o duplicadas
-    let cards = Array.from(track.children).filter(card => {
-        // Solo elementos directos que tengan la clase c-project-card-grid
-        return card.classList && card.classList.contains('c-project-card-grid');
+    // Obtener tarjetas - estrategia múltiple para manejar variaciones de WordPress
+    let cards = [];
+    
+    // Estrategia 1: Hijos directos del track
+    cards = Array.from(track.children).filter(card => {
+        // Verificar si es un elemento <a> con la clase correcta
+        if (card.tagName === 'A' && card.classList && card.classList.contains('c-project-card-grid')) {
+            return true;
+        }
+        // También verificar elementos que contengan la clase aunque no sean hijos directos
+        if (card.classList && card.classList.contains('c-project-card-grid')) {
+            return true;
+        }
+        return false;
     });
     
-    // Si no encontramos con children directos, intentar con querySelectorAll pero filtrar duplicados
+    // Estrategia 2: Si no encontramos con children, buscar con querySelectorAll
     if (cards.length === 0) {
         const allCards = Array.from(track.querySelectorAll('.c-project-card-grid'));
-        // Filtrar duplicados usando un Set con data-project como identificador único
+        // Filtrar duplicados y asegurar que sean hijos directos o elementos válidos
         const seen = new Set();
         cards = allCards.filter(card => {
             const projectId = card.getAttribute('data-project');
+            
+            // Verificar si es duplicado
             if (projectId && seen.has(projectId)) {
-                return false; // Duplicado, ignorar
+                return false;
             }
-            if (projectId) {
-                seen.add(projectId);
-            }
-            // Solo incluir si es hijo directo del track
-            return card.parentElement === track;
+            
+            // Verificar que sea hijo directo del track o un elemento <a> válido
+            const isDirectChild = card.parentElement === track;
+            const isValidCard = card.tagName === 'A' || card.querySelector('img, .c-project-card-image-grid');
+            
+            if (projectId) seen.add(projectId);
+            
+            return (isDirectChild || isValidCard) && projectId;
         });
     }
     
-    // Eliminar duplicados adicionales basándose en data-project
+    // Estrategia 3: Buscar elementos <a> dentro del track que tengan data-project
+    if (cards.length === 0) {
+        const allLinks = track.querySelectorAll('a[data-project]');
+        cards = Array.from(allLinks).filter(link => {
+            return link.classList && link.classList.contains('c-project-card-grid');
+        });
+    }
+    
+    // Eliminar duplicados basándose en data-project
     const uniqueCards = [];
     const seenProjects = new Set();
     cards.forEach(card => {
         const projectId = card.getAttribute('data-project');
-        if (!projectId || !seenProjects.has(projectId)) {
-            if (projectId) seenProjects.add(projectId);
+        if (projectId && !seenProjects.has(projectId)) {
+            seenProjects.add(projectId);
             uniqueCards.push(card);
+        } else if (!projectId) {
+            // Si no tiene data-project, usar el texto del h3 como identificador
+            const h3 = card.querySelector('h3');
+            const title = h3 ? h3.textContent.trim() : '';
+            if (title && !seenProjects.has(title)) {
+                seenProjects.add(title);
+                uniqueCards.push(card);
+            }
         }
     });
     cards = uniqueCards;
 
     // Si no hay tarjetas, no seguimos
     if (cards.length === 0) {
-        console.warn('CyC Carousel: No se encontraron tarjetas en el track');
-        console.warn('Track children:', track.children.length);
-        console.warn('Track HTML:', track.innerHTML.substring(0, 500));
+        console.error('CyC Carousel: No se encontraron tarjetas en el track');
+        console.error('Track children:', track.children.length);
+        console.error('Track children types:', Array.from(track.children).map(c => c.tagName + '.' + c.className));
+        console.error('Track HTML (primeros 1000 chars):', track.innerHTML.substring(0, 1000));
+        console.error('Container HTML:', container.innerHTML.substring(0, 500));
+        
+        // Intentar una última vez después de un delay
+        setTimeout(() => {
+            const retryCards = Array.from(track.querySelectorAll('a.c-project-card-grid, .c-project-card-grid[data-project]'));
+            if (retryCards.length > 0) {
+                console.log('CyC Carousel: Reintentando inicialización después de delay...');
+                // Reinicializar con las tarjetas encontradas
+                location.reload(); // Recargar para reinicializar todo
+            }
+        }, 2000);
         return;
     }
 
