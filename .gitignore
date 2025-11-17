@@ -1,0 +1,75 @@
+# WordPress
+wp-config.php
+wp-content/uploads/*
+!wp-content/uploads/.gitkeep
+wp-content/cache/*
+wp-content/et-cache/*
+wp-content/upgrade/*
+wp-content/upgrade-temp-backup/*
+wp-content/ai1wm-backups/*
+wp-content/wflogs/*
+wp-content/et_temp/*
+
+# WordPress plugins cache
+wp-content/plugins/*/cache/*
+wp-content/plugins/wp-fastest-cache/*
+
+# Logs
+*.log
+*.log.*
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+
+# Docker
+docker-compose.override.yml
+
+# Backups
+*.wpress
+*.sql.gz
+*.tar.gz
+*.zip
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# Node modules (if any)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+
+# Large PDF files (over 100MB)
+Propuesta Gráfica_CIC.pdf
+**/Flyer LIBERA.pdf
+
+# SQL dumps (keep structure, ignore data dumps)
+*.sql
+!docker/sql/*.sql
+

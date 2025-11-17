@@ -1,0 +1,281 @@
+<?php
+/**
+ * Virtual template for CyC project detail pages
+ *
+ * @package CyCEmprendimientos
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+$project = get_query_var('cyc_project');
+
+if (!$project || !is_array($project)) {
+    wp_safe_redirect(home_url('/proyectos/'));
+    exit;
+}
+
+$slug = $project['slug'] ?? '';
+$gallery = $project['gallery'] ?? [];
+$description = $project['description'] ?? '';
+$excerpt = $project['excerpt'] ?? '';
+$title = $project['title'] ?? 'Proyecto';
+$type = $project['type'] ?? '';
+$location = $project['location'] ?? '';
+$stage = $project['stage'] ?? '';
+$stage_label = $project['stage_label'] ?? '';
+$metrics = $project['metrics'] ?? [];
+$characteristics = $project['characteristics'] ?? [];
+$highlights = $project['highlights'] ?? [];
+$brochure = $project['brochure'] ?? '';
+$investment_link = $project['investment_link'] ?? '';
+$has_video = $project['has_video'] ?? false;
+$video_url = $project['video_url'] ?? '';
+
+$share_link = home_url('/proyectos/' . $slug . '/');
+$share_message = rawurlencode('Mira este proyecto de CyC: ' . $title . ' ' . $share_link);
+$whatsapp_contact = 'https://wa.me/5493875058555?text=' . rawurlencode('Hola! Me interesa conocer más sobre ' . $title);
+
+// Add body class for project detail pages
+add_filter('body_class', function($classes) {
+    $classes[] = 'single-cyc-project';
+    return $classes;
+});
+
+// Get header but hide default WordPress header elements
+get_header();
+?>
+<style>
+/* Hide default WordPress header elements on project detail pages */
+body.single-cyc-project #header,
+body.single-cyc-project #headerimg,
+body.single-cyc-project header[role="banner"]:not(.cyc-custom-header):not(.wp-block-template-part),
+body.single-cyc-project .wp-block-template-part:not(.cyc-custom-header):not(:first-child) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Ensure custom header is visible */
+body.single-cyc-project .cyc-custom-header {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10000 !important;
+}
+</style>
+<script>
+// Hide footer completely
+document.addEventListener('DOMContentLoaded', function() {
+    function hideFooter() {
+        const footers = document.querySelectorAll('footer, #footer, #main-footer, footer[role="contentinfo"], .site-footer, div#footer');
+        footers.forEach(function(footer) {
+            footer.style.display = 'none';
+            footer.style.visibility = 'hidden';
+            footer.style.height = '0';
+            footer.style.padding = '0';
+            footer.style.margin = '0';
+            footer.style.overflow = 'hidden';
+            footer.style.opacity = '0';
+        });
+    }
+    hideFooter();
+    setTimeout(hideFooter, 100);
+    setTimeout(hideFooter, 500);
+});
+</script>
+<!-- Custom Header for Project Pages -->
+<header class="cyc-custom-header wp-block-template-part" style="position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 10000 !important; background: linear-gradient(135deg, #2c5aa0 0%, #1e4278 100%) !important; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important; display: block !important; visibility: visible !important;">
+    <div class="wp-block-group" style="max-width: 1400px; margin: 0 auto; padding: 3px 30px 3px 20px !important; display: flex; align-items: center; justify-content: space-between;">
+        <div class="wp-block-site-title" style="margin: 0;">
+            <a href="<?php echo esc_url(home_url('/')); ?>" style="display: flex; align-items: center; gap: 0; text-decoration: none; color: var(--c-white); font-size: 0; line-height: 0; width: auto; min-width: auto;">
+                <span style="display: block; width: 50px; height: 50px; background-image: url('<?php echo esc_url(home_url('/wp-content/uploads/2025/logoCyc.png')); ?>'); background-size: contain; background-repeat: no-repeat; background-position: center; flex-shrink: 0; margin-right: 0;"></span>
+            </a>
+        </div>
+        <a href="/proyectos" class="c-header-projects-btn" style="margin-left: auto; margin-right: 10px; color: var(--c-white); text-decoration: none; font-weight: bold; text-transform: uppercase; padding: 0; transition: all 0.3s ease; background: transparent; border: none; font-size: 1em;">PROYECTOS</a>
+        <div class="c-header-social" style="display: flex; gap: 15px; align-items: center;">
+            <a href="https://wa.me/5493875058555" target="_blank" class="c-social-icon whatsapp" style="color: var(--c-white); text-decoration: none;">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/cycsalta" target="_blank" class="c-social-icon instagram" style="color: var(--c-white); text-decoration: none;">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="c-project-detail-page" style="padding-top: 60px;">
+    <!-- Image Gallery Modal -->
+    <div id="c-image-modal" class="c-image-modal" style="display: none;">
+        <span class="c-modal-close">&times;</span>
+        <span class="c-modal-prev">‹</span>
+        <span class="c-modal-next">›</span>
+        <div class="c-modal-image-container">
+            <img id="c-modal-image" src="" alt="">
+        </div>
+        <div class="c-modal-counter">
+            <span id="c-modal-current">1</span> / <span id="c-modal-total">1</span>
+        </div>
+    </div>
+
+    <div class="c-project-detail-container">
+        <!-- Left Side: Gallery -->
+        <div class="c-project-gallery-side">
+            <?php if (!empty($gallery)) : ?>
+                <div class="c-project-gallery-grid">
+                    <?php foreach ($gallery as $index => $image_url) : ?>
+                        <div class="c-project-gallery-item" data-image-index="<?php echo $index; ?>" data-image-url="<?php echo esc_url($image_url); ?>">
+                            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else : ?>
+                <div class="c-project-gallery-placeholder">
+                    <p>No hay imágenes disponibles</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- Right Side: Information Box -->
+        <div class="c-project-info-side">
+            <div class="c-project-info-box">
+                <!-- Title and Status -->
+                <div class="c-project-header">
+                    <h1><?php echo esc_html($title); ?></h1>
+                    <?php if ($stage_label) : ?>
+                        <span class="c-project-status"><?php echo esc_html($stage_label); ?></span>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Description -->
+                <div class="c-project-description-section">
+                    <?php if ($excerpt) : ?>
+                        <p class="c-project-excerpt"><?php echo esc_html($excerpt); ?></p>
+                    <?php endif; ?>
+                    <?php if ($description) : ?>
+                        <p class="c-project-full-description"><?php echo esc_html($description); ?></p>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Details -->
+                <div class="c-project-details">
+                    <?php if ($type) : ?>
+                        <div class="c-project-detail-item">
+                            <strong>Tipo:</strong> <?php echo esc_html($type); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($location) : ?>
+                        <div class="c-project-detail-item">
+                            <strong>Dirección:</strong> <?php echo esc_html($location); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($metrics)) : ?>
+                        <?php foreach ($metrics as $metric) : ?>
+                            <div class="c-project-detail-item">
+                                <strong><?php echo esc_html($metric['label'] ?? ''); ?>:</strong> <?php echo esc_html($metric['value'] ?? ''); ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Characteristics -->
+                <?php if (!empty($characteristics)) : ?>
+                    <div class="c-project-characteristics">
+                        <h3>Características</h3>
+                        <ul>
+                            <?php foreach ($characteristics as $item) : ?>
+                                <li><?php echo esc_html($item); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Highlights -->
+                <?php if (!empty($highlights)) : ?>
+                    <div class="c-project-highlights">
+                        <h3>Lo que hace único este proyecto</h3>
+                        <ul>
+                            <?php foreach ($highlights as $item) : ?>
+                                <li><?php echo esc_html($item); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Video -->
+                <?php if ($has_video && $video_url) : ?>
+                    <div class="c-project-video-section">
+                        <h3>Video del proyecto</h3>
+                        <video controls style="width: 100%; border-radius: 8px;">
+                            <source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
+                            Tu navegador no soporta el elemento de video.
+                        </video>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Action Buttons -->
+                <div class="c-project-actions">
+                    <?php if ($stage === 'en-construccion' || $stage === 'en-desarrollo') : ?>
+                        <?php if ($brochure) : ?>
+                            <a href="<?php echo esc_url($brochure); ?>" class="c-button c-button-brochure" download target="_blank">
+                                Descargar Brochure
+                            </a>
+                        <?php endif; ?>
+                        <?php if ($investment_link) : ?>
+                            <a href="<?php echo esc_url($investment_link); ?>" class="c-button c-button-invest" target="_blank" rel="noopener noreferrer">
+                                Invertir en este proyecto
+                            </a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <a href="<?php echo esc_url($whatsapp_contact); ?>" class="c-button c-button-whatsapp" target="_blank" rel="noopener noreferrer">
+                        Contactar por WhatsApp
+                    </a>
+                </div>
+
+                <!-- Share Section -->
+                <div class="c-project-share-section">
+                    <h3>Compartir:</h3>
+                    <div class="c-share-buttons">
+                        <button class="c-share-btn js-copy-link" data-copy-target="<?php echo esc_attr($share_link); ?>" data-feedback-target=".c-share-feedback" title="Copiar enlace">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18 16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-8c-1.1 0-2 .9-2 2s.9 2 2 2h8v8h-2v2zM6 8c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2s-.9-2-2-2H6v-8h2V8H6z"/>
+                            </svg>
+                        </button>
+                        <a href="https://wa.me/?text=<?php echo esc_attr($share_message); ?>" class="c-share-btn" target="_blank" rel="noopener noreferrer" title="Compartir en WhatsApp">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_url($share_link); ?>" class="c-share-btn" target="_blank" rel="noopener noreferrer" title="Compartir en Facebook">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=<?php echo esc_url($share_link); ?>&text=<?php echo esc_attr($title); ?>" class="c-share-btn" target="_blank" rel="noopener noreferrer" title="Compartir en Twitter">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <p class="c-share-feedback" aria-live="polite">Enlace copiado al portapapeles</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<?php
+get_footer();
+?>
+
+<a href="https://wa.me/5493875058555?text=Hola!%20Me%20interesa%20conocer%20más%20sobre%20sus%20proyectos" class="c-whatsapp-button" target="_blank" rel="noopener noreferrer">
+    <span class="c-whatsapp-button-tooltip">¿Necesitas ayuda?</span>
+</a>
