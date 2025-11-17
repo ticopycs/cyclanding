@@ -842,41 +842,61 @@
     }
     
     // Inicializar el carousel - múltiples estrategias para asegurar que funcione
+    let initAttempted = false;
+    
     function ensureInit() {
+        // Evitar múltiples inicializaciones
+        if (initAttempted) return;
+        
         // Verificar que el contenedor y track existan y tengan contenido
         if (!container || !track || track.children.length === 0) {
-            // Si no está listo, intentar de nuevo
-            setTimeout(ensureInit, 100);
+            // Si no está listo, intentar de nuevo (máximo 10 intentos)
+            if (ensureInit.attempts === undefined) ensureInit.attempts = 0;
+            ensureInit.attempts++;
+            if (ensureInit.attempts < 10) {
+                setTimeout(ensureInit, 200);
+            }
             return;
         }
         
-        // Si ya tenemos tarjetas, inicializar
-        if (cards.length > 0) {
-            initCarousel();
-        } else {
+        // Verificar que tengamos tarjetas válidas
+        const currentCards = Array.from(track.children).filter(card => {
+            return card.classList && card.classList.contains('c-project-card-grid');
+        });
+        
+        if (currentCards.length === 0) {
             // Si no hay tarjetas aún, esperar un poco más
-            setTimeout(ensureInit, 100);
+            if (ensureInit.attempts === undefined) ensureInit.attempts = 0;
+            ensureInit.attempts++;
+            if (ensureInit.attempts < 10) {
+                setTimeout(ensureInit, 200);
+            }
+            return;
         }
+        
+        // Si llegamos aquí, tenemos todo lo necesario
+        initAttempted = true;
+        initCarousel();
     }
     
     // Estrategia 1: Si el DOM ya está listo
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(ensureInit, 300);
+        setTimeout(ensureInit, 100);
     } 
     // Estrategia 2: Esperar a DOMContentLoaded
     else if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(ensureInit, 300);
+            setTimeout(ensureInit, 100);
         });
     }
     // Estrategia 3: Fallback con window.onload
     else {
         window.addEventListener('load', () => {
-            setTimeout(ensureInit, 300);
+            setTimeout(ensureInit, 100);
         });
     }
     
-    // También intentar inmediatamente (por si acaso)
+    // También intentar después de un delay adicional (por si el contenido se carga dinámicamente)
     setTimeout(ensureInit, 500);
     
     // Limpiar intervalo al salir de la página
