@@ -841,12 +841,43 @@
         }, 2000);
     }
     
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCarousel);
-    } else {
-        // DOM ya está listo, pero esperar un poco más para asegurar que todo esté renderizado
-        setTimeout(initCarousel, 200);
+    // Inicializar el carousel - múltiples estrategias para asegurar que funcione
+    function ensureInit() {
+        // Verificar que el contenedor y track existan y tengan contenido
+        if (!container || !track || track.children.length === 0) {
+            // Si no está listo, intentar de nuevo
+            setTimeout(ensureInit, 100);
+            return;
+        }
+        
+        // Si ya tenemos tarjetas, inicializar
+        if (cards.length > 0) {
+            initCarousel();
+        } else {
+            // Si no hay tarjetas aún, esperar un poco más
+            setTimeout(ensureInit, 100);
+        }
     }
+    
+    // Estrategia 1: Si el DOM ya está listo
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(ensureInit, 300);
+    } 
+    // Estrategia 2: Esperar a DOMContentLoaded
+    else if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(ensureInit, 300);
+        });
+    }
+    // Estrategia 3: Fallback con window.onload
+    else {
+        window.addEventListener('load', () => {
+            setTimeout(ensureInit, 300);
+        });
+    }
+    
+    // También intentar inmediatamente (por si acaso)
+    setTimeout(ensureInit, 500);
     
     // Limpiar intervalo al salir de la página
     window.addEventListener('beforeunload', () => {
