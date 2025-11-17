@@ -287,11 +287,26 @@
                             continue;
                         }
                         
-                        console.log('Agregando marcador:', project.title, 'en', lat, lng);
+                        // Validar rango de coordenadas (Argentina está entre -55 y -22 lat, -73 y -53 lng)
+                        if (lat < -55 || lat > -22 || lng < -73 || lng > -53) {
+                            console.warn('Coordenadas fuera de rango para', project.slug, ':', lat, lng);
+                        }
                         
-                        const marker = L.marker([lat, lng], {
-                            icon: defaultIcon
-                        }).addTo(map);
+                        console.log('Agregando marcador:', project.title, 'en', lat, lng, '(tipo:', typeof lat, typeof lng, ')');
+                        
+                        // Crear marcador con coordenadas explícitas como números
+                        const marker = L.marker([Number(lat), Number(lng)], {
+                            icon: defaultIcon,
+                            draggable: false,
+                            keyboard: true
+                        });
+                        
+                        // Agregar al mapa explícitamente
+                        marker.addTo(map);
+                        
+                        // Verificar que el marcador se agregó correctamente
+                        const markerLatLng = marker.getLatLng();
+                        console.log('Marcador creado en:', markerLatLng.lat, markerLatLng.lng, 'vs esperado:', lat, lng);
 
                         // Create popup content with card style
                         const popupContent = `

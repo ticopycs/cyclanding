@@ -787,13 +787,23 @@ function cyc_child_geocode_address(string $address): ?array {
  * Localize project data for scripts
  */
 add_action('wp_enqueue_scripts', function() {
+    // Obtener coordenadas y asegurar que sean números
+    $coords = cyc_child_geocode_projects();
+    
+    // Asegurar que todas las coordenadas sean números (no strings)
+    foreach ($coords as $slug => &$coord) {
+        $coord['lat'] = (float) $coord['lat'];
+        $coord['lng'] = (float) $coord['lng'];
+    }
+    unset($coord);
+    
     wp_localize_script(
         'twentytwentythree-child-script',
         'cycThemeData',
         [
             'heroImages' => cyc_child_get_homepage_hero_images(),
             'projects' => cyc_child_get_projects_for_js(),
-            'projectCoords' => cyc_child_geocode_projects(), // Coordenadas geocodificadas
+            'projectCoords' => $coords, // Coordenadas geocodificadas (aseguradas como float)
         ]
     );
 }, 25);
