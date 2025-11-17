@@ -1325,6 +1325,8 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     z-index: 1;
 }
 
+/* Asegurar que los marcadores del mapa se muevan correctamente con el zoom */
+/* IMPORTANTE: Leaflet maneja la posición de los marcadores, NO usar position: fixed o absolute */
 .custom-map-marker {
     background: transparent !important;
     border: none !important;
@@ -1332,6 +1334,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     pointer-events: auto !important;
     transition: transform 0.3s ease;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    /* NO definir position aquí - Leaflet lo maneja */
 }
 
 .custom-map-marker:hover {
@@ -1345,10 +1348,17 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     transition: transform 0.3s ease;
     cursor: pointer !important;
     pointer-events: auto !important;
+    /* Leaflet maneja la posición automáticamente */
 }
 
 .leaflet-marker-icon:hover {
     z-index: 1000 !important;
+}
+
+/* Asegurar que los contenedores de marcadores de Leaflet no tengan position fixed */
+.leaflet-marker-pane,
+.leaflet-marker-pane > * {
+    position: absolute !important; /* Leaflet usa absolute para posicionar marcadores */
 }
 
 .leaflet-popup-content-wrapper {
