@@ -248,10 +248,17 @@
             // Usar coordenadas del servidor (ya geocodificadas, sin CORS)
             function getProjectCoords(slug) {
                 if (projectCoords[slug]) {
-                    return {
-                        lat: projectCoords[slug].lat,
-                        lng: projectCoords[slug].lng
-                    };
+                    // Asegurar que sean números, no strings
+                    const lat = parseFloat(projectCoords[slug].lat);
+                    const lng = parseFloat(projectCoords[slug].lng);
+                    
+                    // Validar que sean coordenadas válidas
+                    if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
+                        console.warn('Coordenadas inválidas para:', slug, projectCoords[slug]);
+                        return null;
+                    }
+                    
+                    return { lat, lng };
                 }
                 return null;
             }
@@ -271,7 +278,18 @@
                         const defaultIcon = createCustomIcon(defaultColor, currentIndex);
                         const hoverIcon = createCustomIcon(hoverColor, currentIndex);
                         
-                        const marker = L.marker([coords.lat, coords.lng], {
+                        // Asegurar que las coordenadas sean números válidos
+                        const lat = parseFloat(coords.lat);
+                        const lng = parseFloat(coords.lng);
+                        
+                        if (isNaN(lat) || isNaN(lng)) {
+                            console.error('Coordenadas inválidas para', project.slug, ':', coords);
+                            continue;
+                        }
+                        
+                        console.log('Agregando marcador:', project.title, 'en', lat, lng);
+                        
+                        const marker = L.marker([lat, lng], {
                             icon: defaultIcon
                         }).addTo(map);
 
