@@ -227,8 +227,8 @@
                         <circle cx="16" cy="16" r="8" fill="white"/>
                     </svg>`,
                     iconSize: [32, 40],
-                    iconAnchor: [16, 40],
-                    popupAnchor: [0, -40]
+                    iconAnchor: [16, 40], // Punto inferior del marcador (centro horizontal, parte inferior)
+                    popupAnchor: [0, -40] // Popup arriba del marcador
                 });
             }
 
@@ -400,8 +400,13 @@
                 }
             }
 
-            // Agregar marcadores (sin geocodificación, usando coordenadas del servidor)
-            addMarkersToMap();
+            // Esperar a que el mapa esté completamente inicializado antes de agregar marcadores
+            map.whenReady(function() {
+                // Pequeño delay para asegurar que el mapa esté completamente renderizado
+                setTimeout(function() {
+                    addMarkersToMap();
+                }, 100);
+            });
         }
         
         // Initialize map when ready
