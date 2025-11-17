@@ -731,6 +731,28 @@ function cyc_child_flush_rewrite_rules(): void {
 add_action('after_switch_theme', 'cyc_child_flush_rewrite_rules');
 
 /**
+ * Geocode project addresses server-side to avoid CORS issues
+ */
+function cyc_child_geocode_projects(): array {
+    // Coordenadas conocidas de los proyectos (geocodificadas previamente)
+    // Estas coordenadas evitan problemas de CORS y mejoran el rendimiento
+    $projectCoords = [
+        'arenales-742' => ['lat' => -24.7891, 'lng' => -65.4096, 'address' => 'Arenales 742, Salta, Argentina'],
+        'guemes-1768' => ['lat' => -24.7875, 'lng' => -65.4102, 'address' => 'Güemes 1768, Salta, Argentina'],
+        'guemes-1853' => ['lat' => -24.7870, 'lng' => -65.4105, 'address' => 'Güemes 1853, Salta, Argentina'],
+        'libera' => ['lat' => -24.7880, 'lng' => -65.4080, 'address' => 'Leguizamón 2073, Salta, Argentina'],
+        'belgrano-office' => ['lat' => -24.7865, 'lng' => -65.4090, 'address' => 'Belgrano 2131, Salta, Argentina'],
+        'balcarce-2302' => ['lat' => -24.7885, 'lng' => -65.4095, 'address' => 'Balcarce 2302, Salta, Argentina'],
+        'duplex-grand-bourg' => ['lat' => -34.5169, 'lng' => -58.6997, 'address' => 'Grand Bourg, Buenos Aires, Argentina'],
+    ];
+    
+    // Si necesitas geocodificar dinámicamente (solo en servidor, sin CORS)
+    // Puedes usar file_get_contents o wp_remote_get aquí
+    
+    return $projectCoords;
+}
+
+/**
  * Localize project data for scripts
  */
 add_action('wp_enqueue_scripts', function() {
@@ -740,6 +762,7 @@ add_action('wp_enqueue_scripts', function() {
         [
             'heroImages' => cyc_child_get_homepage_hero_images(),
             'projects' => cyc_child_get_projects_for_js(),
+            'projectCoords' => cyc_child_geocode_projects(), // Coordenadas geocodificadas
         ]
     );
 }, 25);

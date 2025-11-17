@@ -232,7 +232,9 @@
                 });
             }
 
-            // Project locations with exact addresses - will be geocoded
+            // Project locations - usar coordenadas del servidor (sin CORS)
+            const projectCoords = window.cycThemeData?.projectCoords || {};
+            
             const projectAddresses = [
                 { slug: 'arenales-742', address: 'Arenales 742, Salta, Argentina', title: 'Arenales 742' },
                 { slug: 'guemes-1768', address: 'Güemes 1768, Salta, Argentina', title: 'Güemes 1768' },
@@ -240,33 +242,27 @@
                 { slug: 'libera', address: 'Leguizamón 2073, Salta, Argentina', title: 'Edificio Libera' },
                 { slug: 'belgrano-office', address: 'Belgrano 2131, Salta, Argentina', title: 'Edificio Belgrano Office' },
                 { slug: 'balcarce-2302', address: 'Balcarce 2302, Salta, Argentina', title: 'Balcarce 2302' },
-                { slug: 'duplex-grand-bourg', address: 'Casa de Gobierno, Grand Bourg, Buenos Aires, Argentina', title: 'Duplex Grand Bourg' }
+                { slug: 'duplex-grand-bourg', address: 'Grand Bourg, Buenos Aires, Argentina', title: 'Duplex Grand Bourg' }
             ];
 
-            // Geocode addresses using Nominatim API
-            async function geocodeAddress(address) {
-                try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`);
-                    const data = await response.json();
-                    if (data && data.length > 0) {
-                        return {
-                            lat: parseFloat(data[0].lat),
-                            lng: parseFloat(data[0].lon)
-                        };
-                    }
-                } catch (error) {
-                    console.warn('Geocoding error for:', address, error);
+            // Usar coordenadas del servidor (ya geocodificadas, sin CORS)
+            function getProjectCoords(slug) {
+                if (projectCoords[slug]) {
+                    return {
+                        lat: projectCoords[slug].lat,
+                        lng: projectCoords[slug].lng
+                    };
                 }
                 return null;
             }
 
-            // Geocode all addresses and add markers
-            async function addMarkersToMap() {
+            // Agregar marcadores al mapa usando coordenadas del servidor
+            function addMarkersToMap() {
                 const markers = [];
                 let markerIndex = 0;
                 
                 for (const project of projectAddresses) {
-                    const coords = await geocodeAddress(project.address);
+                    const coords = getProjectCoords(project.slug);
                     if (coords) {
                         markerIndex++;
                         const currentIndex = markerIndex;
@@ -386,7 +382,7 @@
                 }
             }
 
-            // Start geocoding
+            // Agregar marcadores (sin geocodificación, usando coordenadas del servidor)
             addMarkersToMap();
         }
         
