@@ -106,3 +106,5 @@ El tema carga automáticamente:
 **Tiempo estimado total:** 10-15 minutos
 **Dificultad:** ⭐⭐☆☆☆ (Básico)
 
+
+

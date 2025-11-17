@@ -410,6 +410,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     margin: 0 !important;
     padding: 0 !important;
     height: auto !important;
+    box-sizing: border-box !important;
 }
 
 .c-carousel-container .c-carousel-track .c-project-card-grid > img,
@@ -489,6 +490,75 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-carousel-next {
     right: 10px;
+}
+
+/* --- Fix duro: asegurar layout vertical SOLO en el carrusel --- */
+.c-carousel-container .c-project-card-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 350px !important;
+    min-width: 350px !important;
+    max-width: 350px !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: var(--c-white) !important;
+    border-radius: var(--c-border-radius) !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,.1) !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    /* Evitar que la tarjeta se divida */
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+}
+
+.c-carousel-container .c-project-card-image-grid {
+    width: 100% !important;
+    height: 250px !important;          /* mismo alto para todas */
+    object-fit: cover !important;
+    display: block !important;
+    background:#f0f0f0 !important;
+    flex-shrink: 0 !important;
+    /* Evitar que la imagen se divida */
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.c-carousel-container .c-project-card-content-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--c-spacing-sm) !important;
+    padding: var(--c-spacing-lg) !important;
+    flex: 1 1 auto !important;
+    box-sizing: border-box !important;
+    /* Evitar que el contenido se divida */
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    min-height: 0 !important;
+}
+
+.c-project-card-desc {
+    color: #4b5563;                     /* gris agradable */
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+/* Track saneado */
+.c-carousel-wrapper { 
+    position: relative; 
+    width: 100%; 
+    overflow: hidden; 
+}
+
+.c-carousel-track {
+    display: flex; 
+    gap: 24px; 
+    width: max-content;
+    will-change: transform;
 }
 
 /* Project Filters */
@@ -2551,7 +2621,7 @@ body:not(.single-cyc-project) .wp-block-template-part:first-child.header-sticky 
     display: inline-block;
     width: 130px;
     height: 130px;
-    background-image: url('/wp-content/uploads/2025/logoCyc.png');
+    background-image: url('/imagenes/logoCyc.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="wp-block-group" style="max-width: 1400px; margin: 0 auto; padding: 3px 30px 3px 20px !important; display: flex; align-items: center; justify-content: space-between;">
         <div class="wp-block-site-title" style="margin: 0;">
             <a href="<?php echo esc_url(home_url('/')); ?>" style="display: flex; align-items: center; gap: 0; text-decoration: none; color: var(--c-white); font-size: 0; line-height: 0; width: auto; min-width: auto;">
-                <span style="display: block; width: 50px; height: 50px; background-image: url('<?php echo esc_url(home_url('/wp-content/uploads/2025/logoCyc.png')); ?>'); background-size: contain; background-repeat: no-repeat; background-position: center; flex-shrink: 0; margin-right: 0;"></span>
+                <span style="display: block; width: 50px; height: 50px; background-image: url('<?php echo esc_url(home_url('/imagenes/logoCyc.png')); ?>'); background-size: contain; background-repeat: no-repeat; background-position: center; flex-shrink: 0; margin-right: 0;"></span>
             </a>
         </div>
         <a href="/proyectos" class="c-header-projects-btn" style="margin-left: auto; margin-right: 10px; color: var(--c-white); text-decoration: none; font-weight: bold; text-transform: uppercase; padding: 0; transition: all 0.3s ease; background: transparent; border: none; font-size: 1em;">PROYECTOS</a>

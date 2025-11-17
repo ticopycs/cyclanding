@@ -520,123 +520,340 @@
         );
 
         // Carousel functionality - Using Grid Cards
-        const carouselContainer = document.querySelector('.c-carousel-container');
-        if (carouselContainer) {
-            const track = carouselContainer.querySelector('.c-carousel-track');
-            const prevBtn = carouselContainer.querySelector('.c-carousel-prev');
-            const nextBtn = carouselContainer.querySelector('.c-carousel-next');
-            
-            if (track && prevBtn && nextBtn) {
-                setTimeout(() => {
-                    // Remove existing clones
-                    const allCards = Array.from(track.children);
-                    const originalCount = 5;
-                    
-                    while (track.children.length > originalCount) {
-                        track.removeChild(track.lastChild);
-                    }
-                    
-                    // Get original cards
-                    const originalCards = Array.from(track.children).slice(0, originalCount);
-                    if (originalCards.length === 0) return;
-                    
-                    const cardWidth = 350;
-                    const gap = 24;
-                    const cardTotalWidth = cardWidth + gap;
-                    const totalWidth = originalCards.length * cardTotalWidth;
-                    
-                    // Clone cards for infinite scroll - ensure structure is preserved
-                    originalCards.forEach(card => {
-                        // Verify card has proper structure before cloning
-                        const img = card.querySelector('img, .c-project-card-image-grid');
-                        const content = card.querySelector('.c-project-card-content-grid');
-                        
-                        if (img && content) {
-                            const clone = card.cloneNode(true);
-                            // Ensure clone maintains flex structure
-                            clone.style.display = 'flex';
-                            clone.style.flexDirection = 'column';
-                            track.appendChild(clone);
-                        }
-                    });
-                    
-                    // Create animation
-                    const animationId = 'cyc-carousel-' + Date.now();
-                    let existingStyle = document.getElementById('cyc-carousel-style');
-                    if (existingStyle) {
-                        existingStyle.remove();
-                    }
-                    
-                    const style = document.createElement('style');
-                    style.id = 'cyc-carousel-style';
-                    style.textContent = `
-                        .c-carousel-track {
-                            animation: ${animationId} 20s linear infinite;
-                        }
-                        @keyframes ${animationId} {
-                            0% {
-                                transform: translateX(0);
-                            }
-                            100% {
-                                transform: translateX(-${totalWidth}px);
-                            }
-                        }
-                    `;
-                    document.head.appendChild(style);
-                    
-                    // Manual navigation
-                    let isAnimating = false;
-                    let currentPosition = 0;
-                    
-                    function scrollCarousel(direction) {
-                        if (isAnimating) return;
-                        isAnimating = true;
-                        
-                        track.style.animationPlayState = 'paused';
-                        
-                        if (direction === 'next') {
-                            currentPosition -= cardTotalWidth;
-                        } else {
-                            currentPosition += cardTotalWidth;
-                        }
-                        
-                        if (currentPosition <= -totalWidth) {
-                            currentPosition = 0;
-                            track.style.transition = 'none';
-                            track.style.transform = 'translateX(0)';
-                        } else if (currentPosition > 0) {
-                            currentPosition = -totalWidth + cardTotalWidth;
-                            track.style.transition = 'none';
-                            track.style.transform = `translateX(${currentPosition}px)`;
-                        } else {
-                            track.style.transition = 'transform 0.5s ease';
-                            track.style.transform = `translateX(${currentPosition}px)`;
-                        }
-                        
-                        setTimeout(() => {
-                            isAnimating = false;
-                            track.style.animation = 'none';
-                            setTimeout(() => {
-                                track.style.animation = `${animationId} 20s linear infinite`;
-                                track.style.animationPlayState = 'running';
-                            }, 10);
-                        }, 500);
-                    }
-                    
-                    prevBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        scrollCarousel('prev');
-                    });
-                    
-                    nextBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        scrollCarousel('next');
-                    });
-                }, 300);
+(function initCycCarousel(){
+    const container = document.querySelector('.c-carousel-container');
+    if (!container) return;
+
+    const track   = container.querySelector('.c-carousel-track');
+    const prevBtn = container.querySelector('.c-carousel-prev');
+    const nextBtn = container.querySelector('.c-carousel-next');
+
+    if (!track) return;
+
+    // Obtener SOLO los hijos directos del track (no buscar recursivamente)
+    // Esto evita encontrar tarjetas anidadas o duplicadas
+    let cards = Array.from(track.children).filter(card => {
+        // Solo elementos directos que tengan la clase c-project-card-grid
+        return card.classList && card.classList.contains('c-project-card-grid');
+    });
+    
+    // Si no encontramos con children directos, intentar con querySelectorAll pero filtrar duplicados
+    if (cards.length === 0) {
+        const allCards = Array.from(track.querySelectorAll('.c-project-card-grid'));
+        // Filtrar duplicados usando un Set con data-project como identificador único
+        const seen = new Set();
+        cards = allCards.filter(card => {
+            const projectId = card.getAttribute('data-project');
+            if (projectId && seen.has(projectId)) {
+                return false; // Duplicado, ignorar
+            }
+            if (projectId) {
+                seen.add(projectId);
+            }
+            // Solo incluir si es hijo directo del track
+            return card.parentElement === track;
+        });
+    }
+    
+    // Eliminar duplicados adicionales basándose en data-project
+    const uniqueCards = [];
+    const seenProjects = new Set();
+    cards.forEach(card => {
+        const projectId = card.getAttribute('data-project');
+        if (!projectId || !seenProjects.has(projectId)) {
+            if (projectId) seenProjects.add(projectId);
+            uniqueCards.push(card);
+        }
+    });
+    cards = uniqueCards;
+
+    // Si no hay tarjetas, no seguimos
+    if (cards.length === 0) {
+        console.warn('CyC Carousel: No se encontraron tarjetas en el track');
+        console.warn('Track children:', track.children.length);
+        console.warn('Track HTML:', track.innerHTML.substring(0, 500));
+        return;
+    }
+
+    console.log('CyC Carousel: Encontradas', cards.length, 'tarjetas únicas');
+    console.log('Tarjetas:', cards.map(c => c.getAttribute('data-project') || c.querySelector('h3')?.textContent || 'sin título'));
+
+    // Medidas fijas (deben coincidir con CSS)
+    const CARD_W = 350;
+    const GAP = 24;
+    const STEP = CARD_W + GAP;
+
+    // Asegurar que todas las tarjetas tengan el ancho correcto y estructura completa
+    cards.forEach((card, index) => {
+        // Estilos de tamaño - aplicar con !important usando setProperty
+        card.style.setProperty('width', CARD_W + 'px', 'important');
+        card.style.setProperty('min-width', CARD_W + 'px', 'important');
+        card.style.setProperty('max-width', CARD_W + 'px', 'important');
+        card.style.setProperty('flex-shrink', '0', 'important');
+        
+        // Estilos de layout para evitar que se dividan
+        card.style.setProperty('display', 'flex', 'important');
+        card.style.setProperty('flex-direction', 'column', 'important');
+        card.style.setProperty('box-sizing', 'border-box', 'important');
+        card.style.setProperty('position', 'relative', 'important');
+        card.style.setProperty('margin', '0', 'important');
+        card.style.setProperty('padding', '0', 'important');
+        card.style.setProperty('overflow', 'hidden', 'important');
+        
+        // Asegurar que la tarjeta mantenga su estructura completa
+        const img = card.querySelector('img, .c-project-card-image-grid');
+        const content = card.querySelector('.c-project-card-content-grid');
+        
+        if (img) {
+            img.style.setProperty('flex-shrink', '0', 'important');
+            img.style.setProperty('width', '100%', 'important');
+            img.style.setProperty('height', '250px', 'important');
+            img.style.setProperty('object-fit', 'cover', 'important');
+            img.style.setProperty('display', 'block', 'important');
+            img.style.setProperty('margin', '0', 'important');
+            img.style.setProperty('padding', '0', 'important');
+        }
+        
+        if (content) {
+            content.style.setProperty('flex', '1 1 auto', 'important');
+            content.style.setProperty('display', 'flex', 'important');
+            content.style.setProperty('flex-direction', 'column', 'important');
+            content.style.setProperty('width', '100%', 'important');
+            content.style.setProperty('box-sizing', 'border-box', 'important');
+            content.style.setProperty('margin', '0', 'important');
+        }
+        
+        // Asegurar que todos los hijos directos mantengan la estructura
+        Array.from(card.children).forEach(child => {
+            if (child.classList && child.classList.contains('c-project-card-content-grid')) {
+                child.style.setProperty('display', 'flex', 'important');
+                child.style.setProperty('flex-direction', 'column', 'important');
+            }
+        });
+        
+        console.log(`Tarjeta ${index + 1} (${card.getAttribute('data-project')}):`, {
+            width: card.offsetWidth,
+            height: card.offsetHeight,
+            hasImg: !!img,
+            hasContent: !!content,
+            children: card.children.length
+        });
+    });
+
+    // Limpiar cualquier tarjeta duplicada que pueda estar en el DOM
+    // Mantener solo las tarjetas únicas que encontramos
+    const allTrackChildren = Array.from(track.children);
+    allTrackChildren.forEach(child => {
+        if (!cards.includes(child)) {
+            // Si este hijo no está en nuestra lista de tarjetas únicas, podría ser un duplicado
+            // Pero solo lo eliminamos si tiene la clase y es un duplicado real
+            if (child.classList && child.classList.contains('c-project-card-grid')) {
+                const projectId = child.getAttribute('data-project');
+                const isDuplicate = cards.some(card => card.getAttribute('data-project') === projectId);
+                if (isDuplicate) {
+                    console.log('Eliminando tarjeta duplicada:', projectId);
+                    child.remove();
+                }
             }
         }
+    });
+
+    // Crear clones para loop infinito
+    // Clonar todas las tarjetas al final para crear efecto infinito
+    cards.forEach(card => {
+        const clone = card.cloneNode(true);
+        clone.style.width = CARD_W + 'px';
+        clone.style.minWidth = CARD_W + 'px';
+        clone.style.maxWidth = CARD_W + 'px';
+        clone.style.flexShrink = '0';
+        track.appendChild(clone);
+    });
+
+    // Variables de control
+    let currentIndex = 0;
+    let autoPlayInterval = null;
+    let isPaused = false;
+    const AUTO_PLAY_SPEED = 3000; // 3 segundos entre transiciones
+    const wrapper = container.querySelector('.c-carousel-wrapper');
+    const wrapperWidth = wrapper ? wrapper.clientWidth : container.clientWidth;
+    const visibleCount = Math.max(1, Math.floor(wrapperWidth / STEP));
+    const totalCards = cards.length;
+    const totalWidth = totalCards * STEP;
+
+    function applyTransform(instant = false) {
+        const offset = -(STEP * currentIndex);
+        if (instant) {
+            track.style.transition = 'none';
+        } else {
+            track.style.transition = 'transform 0.4s ease'; // Reducido de 0.6s a 0.4s (33% más rápido)
+        }
+        track.style.transform = `translateX(${offset}px)`;
+    }
+
+    function goNext() {
+        currentIndex++;
+        
+        // Si llegamos al final de las tarjetas originales, resetear sin transición
+        if (currentIndex >= totalCards) {
+            currentIndex = 0;
+            applyTransform(true);
+            // Forzar reflow para que el navegador procese el cambio
+            void track.offsetWidth;
+            // Aplicar la nueva posición con transición
+            setTimeout(() => {
+                applyTransform(false);
+            }, 10);
+        } else {
+            applyTransform(false);
+        }
+    }
+
+    function goPrev() {
+        currentIndex--;
+        
+        // Si estamos al inicio, saltar al final de los clones sin transición
+        if (currentIndex < 0) {
+            currentIndex = totalCards - 1;
+            applyTransform(true);
+            // Forzar reflow
+            void track.offsetWidth;
+            // Aplicar la nueva posición con transición
+            setTimeout(() => {
+                applyTransform(false);
+            }, 10);
+        } else {
+            applyTransform(false);
+        }
+    }
+
+    // Auto-play infinito
+    function startAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+        
+        autoPlayInterval = setInterval(() => {
+            if (!isPaused) {
+                goNext();
+            }
+        }, AUTO_PLAY_SPEED);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+    }
+
+    // Pausar al hacer hover
+    container.addEventListener('mouseenter', () => {
+        isPaused = true;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        isPaused = false;
+    });
+
+    // Navegación manual con botones
+    prevBtn?.addEventListener('click', e => { 
+        e.preventDefault(); 
+        e.stopPropagation();
+        // Pausar temporalmente el auto-play
+        const wasPaused = isPaused;
+        isPaused = true;
+        goPrev();
+        // Reanudar después de un momento
+        setTimeout(() => {
+            isPaused = wasPaused;
+        }, AUTO_PLAY_SPEED);
+    });
+    
+    nextBtn?.addEventListener('click', e => { 
+        e.preventDefault(); 
+        e.stopPropagation();
+        // Pausar temporalmente el auto-play
+        const wasPaused = isPaused;
+        isPaused = true;
+        goNext();
+        // Reanudar después de un momento
+        setTimeout(() => {
+            isPaused = wasPaused;
+        }, AUTO_PLAY_SPEED);
+    });
+
+    // Recalcular en resize
+    function recalc() {
+        const newWrapperWidth = wrapper ? wrapper.clientWidth : container.clientWidth;
+        const newVisibleCount = Math.max(1, Math.floor(newWrapperWidth / STEP));
+        // No necesitamos maxIndex para loop infinito
+        applyTransform(false);
+    }
+
+    // Recalcular en resize
+    window.addEventListener('resize', () => {
+        clearTimeout(window.__cycCarouselResize);
+        window.__cycCarouselResize = setTimeout(recalc, 150);
+    });
+
+    // Inicializar después de que el DOM esté completamente cargado y las imágenes estén listas
+    function initCarousel() {
+        // Esperar a que todas las imágenes se carguen
+        const images = track.querySelectorAll('img');
+        let imagesLoaded = 0;
+        
+        if (images.length === 0) {
+            // No hay imágenes, inicializar inmediatamente
+            setTimeout(() => {
+                recalc();
+                startAutoPlay();
+            }, 100);
+            return;
+        }
+        
+        const checkImagesLoaded = () => {
+            imagesLoaded++;
+            if (imagesLoaded === images.length) {
+                // Todas las imágenes cargadas, inicializar carousel
+                setTimeout(() => {
+                    recalc();
+                    startAutoPlay(); // Iniciar auto-play después de que todo esté listo
+                }, 50);
+            }
+        };
+        
+        images.forEach(img => {
+            if (img.complete) {
+                checkImagesLoaded();
+            } else {
+                img.addEventListener('load', checkImagesLoaded);
+                img.addEventListener('error', checkImagesLoaded); // Continuar aunque falle
+            }
+        });
+        
+        // Timeout de seguridad: inicializar después de 2 segundos máximo
+        setTimeout(() => {
+            if (imagesLoaded < images.length) {
+                console.warn('CyC Carousel: Algunas imágenes no cargaron, inicializando de todas formas');
+                recalc();
+                startAutoPlay();
+            }
+        }, 2000);
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCarousel);
+    } else {
+        // DOM ya está listo, pero esperar un poco más para asegurar que todo esté renderizado
+        setTimeout(initCarousel, 200);
+    }
+    
+    // Limpiar intervalo al salir de la página
+    window.addEventListener('beforeunload', () => {
+        stopAutoPlay();
+    });
+})();
+  
 
         // Project Filtering System
         const filterButtons = document.querySelectorAll('.c-filter-btn');

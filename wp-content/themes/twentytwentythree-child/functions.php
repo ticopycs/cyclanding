@@ -101,6 +101,30 @@ add_filter('style_loader_src', 'twentytwentythree_child_remove_wp_version');
 add_filter('admin_footer_text', '__return_empty_string', 11);
 add_filter('update_footer', '__return_empty_string', 11);
 
+/**
+ * Change site title to CyC Emprendimientos
+ */
+add_filter('bloginfo', function($output, $show) {
+    if ($show === 'name') {
+        return 'CyC Emprendimientos';
+    }
+    return $output;
+}, 10, 2);
+
+add_filter('bloginfo_url', function($output, $show) {
+    if ($show === 'name') {
+        return 'CyC Emprendimientos';
+    }
+    return $output;
+}, 10, 2);
+
+add_filter('get_bloginfo', function($output, $show) {
+    if ($show === 'name') {
+        return 'CyC Emprendimientos';
+    }
+    return $output;
+}, 10, 2);
+
 
 /**
  * Add header elements: Projects button and social icons
@@ -147,10 +171,43 @@ add_action('wp_head', function() {
             headerGroup.style.alignItems = 'center';
             headerGroup.style.justifyContent = 'space-between';
             
-            // Ensure logo links to homepage
+            // Ensure logo links to homepage and set correct title
             const siteTitle = headerGroup.querySelector('.wp-block-site-title a');
-            if (siteTitle && !siteTitle.getAttribute('href')) {
-                siteTitle.href = '<?php echo esc_js(home_url('/')); ?>';
+            if (siteTitle) {
+                if (!siteTitle.getAttribute('href')) {
+                    siteTitle.href = '<?php echo esc_js(home_url('/')); ?>';
+                }
+                // Change title text if it says "WordPress"
+                const titleText = siteTitle.textContent.trim();
+                if (titleText === 'WordPress' || titleText === '') {
+                    // Find text nodes and replace
+                    const walker = document.createTreeWalker(
+                        siteTitle,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    let textNode;
+                    while (textNode = walker.nextNode()) {
+                        if (textNode.textContent.trim() === 'WordPress' || textNode.textContent.trim() === '') {
+                            textNode.textContent = 'CyC Emprendimientos';
+                        }
+                    }
+                    // Also check for any span/div elements with text
+                    const textElements = siteTitle.querySelectorAll('span, div, em, strong');
+                    textElements.forEach(el => {
+                        if (el.textContent.trim() === 'WordPress' || el.textContent.trim() === '') {
+                            el.textContent = 'CyC Emprendimientos';
+                        }
+                    });
+                    // If no text found, add it
+                    if (siteTitle.textContent.trim() === '' || siteTitle.textContent.trim() === 'WordPress') {
+                        const titleSpan = document.createElement('span');
+                        titleSpan.textContent = 'CyC Emprendimientos';
+                        titleSpan.style.marginLeft = '20px';
+                        siteTitle.appendChild(titleSpan);
+                    }
+                }
             }
             
             // Hide default navigation menu
@@ -263,7 +320,8 @@ add_action('wp_footer', function() {
  */
 function cyc_child_get_projects_data(): array {
     $whatsapp_base = 'https://wa.me/5493875058555?text=';
-    $uploads_base = home_url('/wp-content/uploads/2025/');
+    // Construir base URL sin codificar, luego codificar solo las partes del path que tienen espacios
+    $uploads_base = home_url('/imagenes/');
     
     $projects = [
         'arenales-742' => [
@@ -278,17 +336,17 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'agotado',
             'availability_label' => 'Unidades agotadas',
             'badge_class' => 'c-badge-soldout',
-            'primary_image' => $uploads_base . 'arenales-742/Arenales%20742.jpg',
+            'primary_image' => $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('Arenales 742.jpg'),
             'hero_images' => [
-                $uploads_base . 'arenales-742/Arenales%20742.jpg',
-                $uploads_base . 'arenales-742/arenales%20742(1).jpg',
-                $uploads_base . 'arenales-742/arenales%20742(2).jpg',
+                $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('Arenales 742.jpg'),
+                $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('arenales 742(1).jpg'),
+                $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('arenales 742(2).jpg'),
             ],
             'gallery' => [
-                $uploads_base . 'arenales-742/Arenales%20742.jpg',
-                $uploads_base . 'arenales-742/arenales%20742(1).jpg',
-                $uploads_base . 'arenales-742/arenales%20742(2).jpg',
-                $uploads_base . 'arenales-742/arenales.jpg',
+                $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('Arenales 742.jpg'),
+                $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('arenales 742(1).jpg'),
+                $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('arenales 742(2).jpg'),
+                $uploads_base . rawurlencode('arenales 742') . '/arenales.jpg',
             ],
             'characteristics' => [
                 'Amenities',
@@ -307,7 +365,7 @@ function cyc_child_get_projects_data(): array {
                 'Amenities y cocheras incluidas',
             ],
             'has_video' => true,
-            'video_url' => home_url('/wp-content/uploads/2025/WhatsApp-Video-2025-10-22-at-18.09.02_d4e3eb07.mp4'),
+            'video_url' => '', // Video removido
             'investment_link' => $whatsapp_base . rawurlencode('Hola! Quiero información sobre Arenales 742 o proyectos similares'),
         ],
         'guemes-1768' => [
@@ -322,16 +380,16 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'agotado',
             'availability_label' => 'Unidades agotadas',
             'badge_class' => 'c-badge-soldout',
-            'primary_image' => $uploads_base . 'guemes-1768/guemes%201768.jpg',
+            'primary_image' => $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768.jpg'),
             'hero_images' => [
-                $uploads_base . 'guemes-1768/guemes%201768.jpg',
-                $uploads_base . 'guemes-1768/guemes%201768(1).jpg',
-                $uploads_base . 'guemes-1768/guemes1768.jpg',
+                $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768.jpg'),
+                $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768(1).jpg'),
+                $uploads_base . rawurlencode('guemes 1768') . '/guemes1768.jpg',
             ],
             'gallery' => [
-                $uploads_base . 'guemes-1768/guemes%201768.jpg',
-                $uploads_base . 'guemes-1768/guemes%201768(1).jpg',
-                $uploads_base . 'guemes-1768/guemes1768.jpg',
+                $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768.jpg'),
+                $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768(1).jpg'),
+                $uploads_base . rawurlencode('guemes 1768') . '/guemes1768.jpg',
             ],
             'characteristics' => [
                 'Ubicación estratégica',
@@ -363,14 +421,14 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'agotado',
             'availability_label' => 'Unidades agotadas',
             'badge_class' => 'c-badge-soldout',
-            'primary_image' => $uploads_base . 'guemes-1853/guemes%201853.jpg',
+            'primary_image' => $uploads_base . rawurlencode('Guemes 1853') . '/' . rawurlencode('guemes 1853.jpg'),
             'hero_images' => [
-                $uploads_base . 'guemes-1853/guemes%201853.jpg',
-                $uploads_base . 'guemes-1853/G%C3%BCemes%201853.jpg',
+                $uploads_base . rawurlencode('Guemes 1853') . '/' . rawurlencode('guemes 1853.jpg'),
+                $uploads_base . rawurlencode('Guemes 1853') . '/' . rawurlencode('Güemes 1853.jpg'),
             ],
             'gallery' => [
-                $uploads_base . 'guemes-1853/guemes%201853.jpg',
-                $uploads_base . 'guemes-1853/G%C3%BCemes%201853.jpg',
+                $uploads_base . rawurlencode('Guemes 1853') . '/' . rawurlencode('guemes 1853.jpg'),
+                $uploads_base . rawurlencode('Guemes 1853') . '/' . rawurlencode('Güemes 1853.jpg'),
             ],
             'characteristics' => [
                 'Construcción tradicional',
@@ -401,14 +459,12 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'disponible',
             'availability_label' => 'Unidades disponibles',
             'badge_class' => 'c-badge-available',
-            'primary_image' => $uploads_base . 'guemes-1853/guemes%201853.jpg',
+            'primary_image' => home_url('/imagenes/libera/liberaPic.jpg'),
             'hero_images' => [
-                $uploads_base . 'guemes-1853/guemes%201853.jpg',
-                $uploads_base . 'guemes-1853/G%C3%BCemes%201853.jpg',
+                home_url('/imagenes/libera/liberaPic.jpg'),
             ],
             'gallery' => [
-                $uploads_base . 'guemes-1853/guemes%201853.jpg',
-                $uploads_base . 'guemes-1853/G%C3%BCemes%201853.jpg',
+                home_url('/imagenes/libera/liberaPic.jpg'),
             ],
             'characteristics' => [
                 'Ubicación estratégica',
@@ -426,7 +482,7 @@ function cyc_child_get_projects_data(): array {
                 'Estética moderna',
                 'Salón de usos múltiples',
             ],
-            'brochure' => $uploads_base . 'libera/Flyer%20LIBERA.pdf',
+            'brochure' => $uploads_base . 'libera/' . rawurlencode('Flyer LIBERA.pdf'),
             'investment_link' => $whatsapp_base . rawurlencode('Hola! Quiero invertir en Edificio Libera'),
         ],
         'belgrano-office' => [
@@ -441,12 +497,12 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'disponible',
             'availability_label' => 'Oficinas disponibles',
             'badge_class' => 'c-badge-available',
-            'primary_image' => $uploads_base . 'belgrano-office/bOffice.png',
+            'primary_image' => $uploads_base . rawurlencode('belgrano office') . '/bOffice.png',
             'hero_images' => [
-                $uploads_base . 'belgrano-office/bOffice.png',
+                $uploads_base . rawurlencode('belgrano office') . '/bOffice.png',
             ],
             'gallery' => [
-                $uploads_base . 'belgrano-office/bOffice.png',
+                $uploads_base . rawurlencode('belgrano office') . '/bOffice.png',
             ],
             'characteristics' => [
                 'Ubicación estratégica',
@@ -464,7 +520,7 @@ function cyc_child_get_projects_data(): array {
                 'Ubicado en corredor Belgrano',
                 'Espacios para desarrollo profesional',
             ],
-            'brochure' => $uploads_base . 'belgrano-office/BELGRANO%20OFFICE.pdf',
+            'brochure' => $uploads_base . rawurlencode('belgrano office') . '/' . rawurlencode('BELGRANO OFFICE.pdf'),
             'investment_link' => $whatsapp_base . rawurlencode('Hola! Quiero invertir en Edificio Belgrano Office'),
         ],
         'atocha' => [
@@ -517,14 +573,14 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'agotado',
             'availability_label' => 'Unidades agotadas',
             'badge_class' => 'c-badge-soldout',
-            'primary_image' => $uploads_base . 'balcarce-2302/Balcarce%202302.jpg',
+            'primary_image' => $uploads_base . rawurlencode('balcarce 2302') . '/' . rawurlencode('Balcarce 2302.jpg'),
             'hero_images' => [
-                $uploads_base . 'balcarce-2302/Balcarce%202302.jpg',
-                $uploads_base . 'balcarce-2302/balcarce%202302(1).jpg',
+                $uploads_base . rawurlencode('balcarce 2302') . '/' . rawurlencode('Balcarce 2302.jpg'),
+                $uploads_base . rawurlencode('balcarce 2302') . '/' . rawurlencode('balcarce 2302(1).jpg'),
             ],
             'gallery' => [
-                $uploads_base . 'balcarce-2302/Balcarce%202302.jpg',
-                $uploads_base . 'balcarce-2302/balcarce%202302(1).jpg',
+                $uploads_base . rawurlencode('balcarce 2302') . '/' . rawurlencode('Balcarce 2302.jpg'),
+                $uploads_base . rawurlencode('balcarce 2302') . '/' . rawurlencode('balcarce 2302(1).jpg'),
             ],
             'characteristics' => [
                 'Excelente ubicación',
@@ -553,14 +609,14 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'agotado',
             'availability_label' => 'Unidades agotadas',
             'badge_class' => 'c-badge-soldout',
-            'primary_image' => $uploads_base . 'duplex-grand-bourg/Duplex%20Grand%20Bourg.jpg',
+            'primary_image' => $uploads_base . rawurlencode('dueplex grand bourg') . '/' . rawurlencode('Duplex Grand Bourg.jpg'),
             'hero_images' => [
-                $uploads_base . 'duplex-grand-bourg/Duplex%20Grand%20Bourg.jpg',
-                $uploads_base . 'duplex-grand-bourg/duplex%20gb.jpg',
+                $uploads_base . rawurlencode('dueplex grand bourg') . '/' . rawurlencode('Duplex Grand Bourg.jpg'),
+                $uploads_base . rawurlencode('dueplex grand bourg') . '/' . rawurlencode('duplex gb.jpg'),
             ],
             'gallery' => [
-                $uploads_base . 'duplex-grand-bourg/Duplex%20Grand%20Bourg.jpg',
-                $uploads_base . 'duplex-grand-bourg/duplex%20gb.jpg',
+                $uploads_base . rawurlencode('dueplex grand bourg') . '/' . rawurlencode('Duplex Grand Bourg.jpg'),
+                $uploads_base . rawurlencode('dueplex grand bourg') . '/' . rawurlencode('duplex gb.jpg'),
             ],
             'characteristics' => [
                 'Unidades dúplex',
@@ -596,17 +652,17 @@ function cyc_child_get_project(string $slug): ?array {
  * @return string[]
  */
 function cyc_child_get_homepage_hero_images(): array {
-    $uploads_base = home_url('/wp-content/uploads/2025/');
+    $uploads_base = home_url('/imagenes/');
     return [
-        $uploads_base . 'arenales-742/Arenales%20742.jpg',
-        $uploads_base . 'arenales-742/arenales%20742(1).jpg',
-        $uploads_base . 'guemes-1768/guemes%201768.jpg',
-        $uploads_base . 'guemes-1853/guemes%201853.jpg',
-        $uploads_base . 'arenales-742/arenales%20742(2).jpg',
-        $uploads_base . 'guemes-1768/guemes%201768(1).jpg',
+        $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('Arenales 742.jpg'),
+        $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('arenales 742(1).jpg'),
+        $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768.jpg'),
+        $uploads_base . rawurlencode('Guemes 1853') . '/' . rawurlencode('guemes 1853.jpg'),
+        $uploads_base . rawurlencode('arenales 742') . '/' . rawurlencode('arenales 742(2).jpg'),
+        $uploads_base . rawurlencode('guemes 1768') . '/' . rawurlencode('guemes 1768(1).jpg'),
         $uploads_base . 'atocha/atocha.jpg',
-        $uploads_base . 'balcarce-2302/Balcarce%202302.jpg',
-        $uploads_base . 'duplex-grand-bourg/Duplex%20Grand%20Bourg.jpg',
+        $uploads_base . rawurlencode('balcarce 2302') . '/' . rawurlencode('Balcarce 2302.jpg'),
+        $uploads_base . rawurlencode('dueplex grand bourg') . '/' . rawurlencode('Duplex Grand Bourg.jpg'),
     ];
 }
 
@@ -687,3 +743,36 @@ add_action('wp_enqueue_scripts', function() {
         ]
     );
 }, 25);
+
+/**
+ * Load homepage content from HTML file automatically (for Docker/local development)
+ * This allows editing homepage_content.html and seeing changes immediately
+ */
+function cyc_child_load_homepage_from_file($content) {
+    // Only on homepage/front page
+    if (!is_front_page() && !is_home()) {
+        return $content;
+    }
+    
+    $html_file = get_stylesheet_directory() . '/homepage_content.html';
+    
+    // Check if file exists
+    if (!file_exists($html_file)) {
+        return $content;
+    }
+    
+    // Read file content
+    $html_content = file_get_contents($html_file);
+    
+    // Return HTML content (bypass WordPress content filters for raw HTML)
+    if ($html_content !== false) {
+        // Remover filtros que pueden modificar el HTML
+        remove_filter('the_content', 'wpautop');
+        remove_filter('the_content', 'wptexturize');
+        return $html_content;
+    }
+    
+    return $content;
+}
+// Prioridad alta para ejecutar antes de otros filtros
+add_filter('the_content', 'cyc_child_load_homepage_from_file', 1);

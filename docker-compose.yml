@@ -31,6 +31,8 @@ services:
     volumes:
       - ./wp-content:/var/www/html/wp-content
       - ./wp-config.php:/var/www/html/wp-config.php
+      - ./imagenes:/var/www/html/imagenes
+      - ./logoCyc.png:/var/www/html/logoCyc.png
 
   wpcli:
     image: wordpress:cli-php8.2
