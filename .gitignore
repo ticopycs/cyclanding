@@ -10,6 +10,15 @@ wp-content/ai1wm-backups/*
 wp-content/wflogs/*
 wp-content/et_temp/*
 
+# WordPress plugins (not needed in repo)
+wp-content/plugins/*
+
+# WordPress themes (only keep twentytwentythree and twentytwentythree-child)
+wp-content/themes/Divi/
+wp-content/themes/Divi-child/
+wp-content/themes/twentytwentyfour/
+wp-content/themes/twentytwentyfive/
+
 # WordPress plugins cache
 wp-content/plugins/*/cache/*
 wp-content/plugins/wp-fastest-cache/*
@@ -39,11 +48,14 @@ desktop.ini
 # Docker
 docker-compose.override.yml
 
-# Backups
+# Backups and archives
 *.wpress
 *.sql.gz
 *.tar.gz
 *.zip
+wordpress-*.zip
+wp-content.tar.gz
+imagenes.zip
 
 # Temporary files
 *.tmp
@@ -68,6 +80,12 @@ yarn-error.log
 # Large PDF files (over 100MB)
 Propuesta Gráfica_CIC.pdf
 **/Flyer LIBERA.pdf
+
+# SQL dumps (exclude large ones, keep only docker SQL files)
+*.sql
+!docker/sql/*.sql
+c2550550_wordpre.sql
+bd.sql
 
 # SQL dumps (keep structure, ignore data dumps)
 *.sql
