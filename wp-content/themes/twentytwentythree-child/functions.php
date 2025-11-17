@@ -745,10 +745,26 @@ add_action('wp_enqueue_scripts', function() {
 }, 25);
 
 /**
- * Load homepage content from HTML file automatically (for Docker/local development)
+ * Load homepage content from HTML file automatically (for Docker/local development only)
  * This allows editing homepage_content.html and seeing changes immediately
+ * 
+ * IMPORTANT: This function only works in local development. In staging/production,
+ * the content should be copied directly into WordPress pages.
  */
 function cyc_child_load_homepage_from_file($content) {
+    // Solo activar en desarrollo local (verificar si estamos en localhost o Docker)
+    $is_local = (
+        isset($_SERVER['HTTP_HOST']) && 
+        (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || 
+         strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false ||
+         strpos($_SERVER['HTTP_HOST'], '.local') !== false)
+    );
+    
+    // Si no es local, usar siempre el contenido de WordPress
+    if (!$is_local) {
+        return $content;
+    }
+    
     // Only on homepage/front page
     if (!is_front_page() && !is_home()) {
         return $content;
