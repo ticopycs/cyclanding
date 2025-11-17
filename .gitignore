@@ -87,7 +87,3 @@ Propuesta Gráfica_CIC.pdf
 c2550550_wordpre.sql
 bd.sql
 
-# SQL dumps (keep structure, ignore data dumps)
-*.sql
-!docker/sql/*.sql
-
