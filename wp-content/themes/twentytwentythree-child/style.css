@@ -2906,65 +2906,355 @@ html {
     }
 }
 
-/* Responsive Adjustments */
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE FIRST APPROACH
+   ============================================ */
+
+/* Tablet and below (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 var(--c-spacing-md);
+    }
+    
+    .c-services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--c-spacing-md);
+    }
+    
+    .c-project-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--c-spacing-lg);
+    }
+}
+
+/* Mobile devices (max-width: 768px) */
 @media (max-width: 768px) {
+    /* Typography - Mobile */
+    h1 { 
+        font-size: 2em !important; 
+        line-height: 1.2;
+    }
+    h2 { 
+        font-size: 1.6em !important; 
+        line-height: 1.3;
+    }
+    h3 { 
+        font-size: 1.3em !important; 
+        line-height: 1.4;
+    }
+    h4 { 
+        font-size: 1.1em !important; 
+    }
+    
+    /* Container adjustments */
+    .container {
+        padding: 0 var(--c-spacing-sm);
+        max-width: 100%;
+    }
+    
+    /* Hero Section - Mobile */
+    .c-hero {
+        height: 70vh;
+        min-height: 500px;
+        padding: var(--c-spacing-md);
+    }
+    
+    .c-hero-content {
+        max-width: 100%;
+        text-align: center;
+        padding: var(--c-spacing-md);
+    }
+    
     .c-hero h1 {
-        font-size: 2.5em;
+        font-size: 2em !important;
+        margin-bottom: var(--c-spacing-sm);
+        line-height: 1.2;
     }
+    
     .c-hero p {
-        font-size: 1.2em;
+        font-size: 1em !important;
+        line-height: 1.5;
     }
-    h1 { font-size: 2.2em; }
-    h2 { font-size: 1.8em; }
-    h3 { font-size: 1.5em; }
+    
+    /* Sections - Mobile */
     .c-section {
-        padding: var(--c-spacing-xl) var(--c-spacing-md);
+        padding: var(--c-spacing-lg) var(--c-spacing-sm);
     }
-    .c-project-carousel, .c-project-grid {
-        grid-template-columns: 1fr;
+    
+    .c-section > .container {
+        padding: 0 var(--c-spacing-sm);
     }
-    .c-team-grid {
-        grid-template-columns: 1fr;
+    
+    /* Services Grid - Mobile */
+    .c-services-grid {
+        grid-template-columns: 1fr !important;
+        gap: var(--c-spacing-md);
     }
-    .c-location-info {
-        grid-template-columns: 1fr;
+    
+    .c-service-card {
+        padding: var(--c-spacing-md);
     }
-    .c-stats-container {
-        grid-template-columns: 1fr;
-    }
-    .c-stats-grid {
-        grid-template-columns: 1fr;
-    }
+    
+    /* Carousel - Mobile */
     .c-carousel-container {
-        padding: var(--c-spacing-lg) 40px;
+        padding: var(--c-spacing-md) 50px var(--c-spacing-md) 50px;
+        margin: var(--c-spacing-md) 0;
     }
+    
+    .c-carousel-container .c-project-card-grid {
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+    }
+    
+    .c-carousel-container .c-project-card-image-grid {
+        height: 200px !important;
+    }
+    
     .c-carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.5em;
+        width: 35px;
+        height: 35px;
+        font-size: 1.2em;
+        padding: 0;
     }
+    
+    .c-carousel-prev {
+        left: 5px;
+    }
+    
+    .c-carousel-next {
+        right: 5px;
+    }
+    
+    /* Project Grid - Mobile */
+    .c-project-grid {
+        grid-template-columns: 1fr !important;
+        gap: var(--c-spacing-lg);
+    }
+    
+    .c-project-grid .c-project-card {
+        width: 100% !important;
+        min-width: auto !important;
+        max-width: 100% !important;
+    }
+    
+    /* Stats Grid - Mobile */
+    .c-stats-container {
+        flex-direction: column;
+        gap: var(--c-spacing-lg);
+    }
+    
+    .c-stats-description {
+        order: 2;
+        text-align: center;
+    }
+    
+    .c-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--c-spacing-md);
+        order: 1;
+    }
+    
+    .c-stat-item {
+        padding: var(--c-spacing-md);
+    }
+    
+    .c-stat-number {
+        font-size: 2em;
+    }
+    
+    .c-stat-label {
+        font-size: 0.85em;
+    }
+    
+    /* Project Detail Pages - Mobile */
+    .c-project-detail-container {
+        flex-direction: column;
+    }
+    
+    .c-project-gallery-side {
+        max-height: none;
+        padding: var(--c-spacing-sm);
+    }
+    
+    .c-project-info-side {
+        flex: 1;
+        max-height: none;
+        border-left: none;
+        border-top: 1px solid var(--c-border);
+        padding: var(--c-spacing-md);
+    }
+    
+    .c-project-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--c-spacing-sm);
+    }
+    
+    .c-project-header h1 {
+        font-size: 1.5em !important;
+    }
+    
+    /* Map - Mobile */
+    #projects-map {
+        height: 400px !important;
+        margin: var(--c-spacing-md) 0;
+    }
+    
+    /* Buttons - Mobile */
+    .c-button {
+        padding: var(--c-spacing-sm) var(--c-spacing-md);
+        font-size: 0.9em;
+        width: auto;
+        display: inline-block;
+    }
+    
+    .c-button-brochure {
+        padding: var(--c-spacing-sm) var(--c-spacing-md);
+        font-size: 0.9em;
+    }
+    
+    /* WhatsApp Button - Mobile */
     .c-whatsapp-button {
         width: 55px;
         height: 55px;
         bottom: 20px;
         right: 20px;
     }
+    
     .c-whatsapp-button::before {
         width: 30px;
         height: 30px;
     }
+    
     .c-whatsapp-button-tooltip {
         display: none;
     }
+    
+    /* Header - Mobile */
     main.wp-block-group {
         padding-top: 70px;
     }
+    
     .wp-block-site-title a::before {
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
     }
+    
     .wp-block-site-title a {
-        font-size: 1.2em !important;
+        font-size: 1em !important;
+    }
+    
+    /* Navigation - Mobile */
+    .wp-block-navigation__responsive-container {
+        width: 100%;
+    }
+    
+    /* Text alignment - Mobile */
+    .text-center {
+        text-align: center !important;
+    }
+    
+    /* Spacing adjustments - Mobile */
+    .c-spacing-xl {
+        --c-spacing-xl: 32px;
+    }
+    
+    .c-spacing-lg {
+        --c-spacing-lg: 24px;
+    }
+}
+
+/* Small mobile devices (max-width: 480px) */
+@media (max-width: 480px) {
+    /* Typography - Small Mobile */
+    h1 { 
+        font-size: 1.75em !important; 
+    }
+    h2 { 
+        font-size: 1.4em !important; 
+    }
+    h3 { 
+        font-size: 1.2em !important; 
+    }
+    
+    /* Hero - Small Mobile */
+    .c-hero {
+        height: 60vh;
+        min-height: 400px;
+    }
+    
+    .c-hero h1 {
+        font-size: 1.75em !important;
+    }
+    
+    .c-hero p {
+        font-size: 0.9em !important;
+    }
+    
+    /* Carousel - Small Mobile */
+    .c-carousel-container {
+        padding: var(--c-spacing-sm) 40px;
+    }
+    
+    .c-carousel-container .c-project-card-grid {
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
+    }
+    
+    .c-carousel-container .c-project-card-image-grid {
+        height: 180px !important;
+    }
+    
+    .c-carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+    
+    /* Stats Grid - Small Mobile */
+    .c-stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Map - Small Mobile */
+    #projects-map {
+        height: 350px !important;
+    }
+    
+    /* Container - Small Mobile */
+    .container {
+        padding: 0 var(--c-spacing-xs);
+    }
+    
+    .c-section {
+        padding: var(--c-spacing-md) var(--c-spacing-xs);
+    }
+    
+    /* Project Gallery - Small Mobile */
+    .c-project-gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Modal - Small Mobile */
+    .c-modal-prev,
+    .c-modal-next {
+        font-size: 30px;
+        padding: 8px;
+    }
+    
+    .c-modal-prev {
+        left: 5px;
+    }
+    
+    .c-modal-next {
+        right: 5px;
+    }
+    
+    .c-modal-close {
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
     }
 }
 
