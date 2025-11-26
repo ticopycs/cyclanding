@@ -17,6 +17,15 @@ Version: 1.0.0
     font-display: swap;
 }
 
+/* Fuente Shary Regular */
+@font-face {
+    font-family: 'Shary';
+    src: url('fonts/SHARY-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Minimalist Design System */
 
 /* 1. CSS Variables (Tokens) */
@@ -37,9 +46,9 @@ Version: 1.0.0
     --c-spacing-xl: 64px;
 
     /* Tipografía Shary */
-    --c-font-family-primary: 'Montserrat', sans-serif;
+    --c-font-family-primary: 'Shary', 'Montserrat', sans-serif;
     --c-font-family-title: 'Shary Bold', 'Montserrat', sans-serif;
-    --c-font-family-text: 'Montserrat', sans-serif; /* Usar Montserrat Light para textos si no hay Shary Light */
+    --c-font-family-text: 'Shary', 'Montserrat', sans-serif;
     --c-font-weight-light: 300;
     --c-font-weight-regular: 400;
     --c-font-weight-medium: 500;
@@ -68,7 +77,7 @@ Version: 1.0.0
 /* 2. Base Styles Override */
 body {
     font-family: var(--c-font-family-text) !important;
-    font-weight: var(--c-font-weight-light) !important; /* Shary Light para textos */
+    font-weight: var(--c-font-weight-regular) !important; /* Shary Regular para textos */
     color: var(--c-text-dark);
     line-height: 1.6;
     background-color: var(--c-white);
