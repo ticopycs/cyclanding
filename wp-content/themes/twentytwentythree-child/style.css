@@ -8,6 +8,15 @@ Description: Custom child theme for CyC Emprendimientos with minimalist design
 Version: 1.0.0
 */
 
+/* Fuente Shary Bold */
+@font-face {
+    font-family: 'Shary Bold';
+    src: url('fonts/SHARY-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Minimalist Design System */
 
 /* 1. CSS Variables (Tokens) */
@@ -27,11 +36,10 @@ Version: 1.0.0
     --c-spacing-lg: 32px;
     --c-spacing-xl: 64px;
 
-    /* Tipografía Shary - Si tienes los archivos de fuente, reemplaza esta URL */
-    /* Por ahora usamos una fuente sans-serif similar hasta que se cargue Shary */
-    --c-font-family-primary: 'Shary', 'Montserrat', sans-serif;
-    --c-font-family-title: 'Shary Bold', 'Shary', 'Montserrat', sans-serif;
-    --c-font-family-text: 'Shary', 'Shary Light', 'Montserrat', sans-serif;
+    /* Tipografía Shary */
+    --c-font-family-primary: 'Montserrat', sans-serif;
+    --c-font-family-title: 'Shary Bold', 'Montserrat', sans-serif;
+    --c-font-family-text: 'Montserrat', sans-serif; /* Usar Montserrat Light para textos si no hay Shary Light */
     --c-font-weight-light: 300;
     --c-font-weight-regular: 400;
     --c-font-weight-medium: 500;

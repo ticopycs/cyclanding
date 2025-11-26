@@ -18,9 +18,8 @@ function twentytwentythree_child_enqueue_styles() {
         wp_get_theme()->parent()->get('Version')
     );
 
-    // Google Fonts: Montserrat (fallback hasta que se cargue Shary)
-    // TODO: Si tienes los archivos de fuente Shary (Shary Bold, Shary Light, Shary Regular),
-    // agrega aquí @font-face para cargarlos localmente
+    // Google Fonts: Montserrat (fallback para textos, ya que Shary Bold solo es para títulos)
+    // La fuente Shary Bold se carga directamente desde @font-face en style.css
     wp_enqueue_style(
         'child-google-fonts',
         'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap',
