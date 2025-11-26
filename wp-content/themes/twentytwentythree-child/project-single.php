@@ -151,7 +151,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="c-project-header">
                     <h1><?php echo esc_html($title); ?></h1>
                     <?php if ($stage_label) : ?>
-                        <span class="c-project-status"><?php echo esc_html($stage_label); ?></span>
+                        <span class="c-project-status">
+                            <?php echo esc_html($stage_label); ?>
+                            <?php if ($stage === 'en-construccion' || $stage === 'en-desarrollo') : ?>
+                                <span class="c-progress-indicator" title="Grado de avance">⚡</span>
+                            <?php endif; ?>
+                        </span>
                     <?php endif; ?>
                 </div>
 
@@ -231,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <?php endif; ?>
                         <?php if ($investment_link) : ?>
                             <a href="<?php echo esc_url($investment_link); ?>" class="c-button c-button-invest" target="_blank" rel="noopener noreferrer">
-                                Invertir en este proyecto
+                                Invertir
                             </a>
                         <?php endif; ?>
                     <?php endif; ?>

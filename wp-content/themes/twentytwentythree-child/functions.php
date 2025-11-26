@@ -18,7 +18,9 @@ function twentytwentythree_child_enqueue_styles() {
         wp_get_theme()->parent()->get('Version')
     );
 
-    // Google Fonts: Montserrat (Gotham alternative)
+    // Google Fonts: Montserrat (fallback hasta que se cargue Shary)
+    // TODO: Si tienes los archivos de fuente Shary (Shary Bold, Shary Light, Shary Regular),
+    // agrega aquí @font-face para cargarlos localmente
     wp_enqueue_style(
         'child-google-fonts',
         'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap',
@@ -740,9 +742,14 @@ function cyc_child_geocode_projects(): array {
         'guemes-1768' => 'Güemes 1768, Salta, Argentina',
         'guemes-1853' => 'Güemes 1853, Salta, Argentina',
         'libera' => 'Leguizamón 2073, Salta, Argentina',
+        'libera-torre2' => 'Coronel Suárez 486, Salta, Argentina', // Segunda torre de Libera
         'belgrano-office' => 'Belgrano 2131, Salta, Argentina',
         'balcarce-2302' => 'Balcarce 2302, Salta, Argentina',
-        'duplex-grand-bourg' => 'Grand Bourg, Buenos Aires, Argentina',
+        'balcarce-2320' => 'Balcarce 2320, Salta, Argentina',
+        'fepusa' => 'FEPUSA, Salta, Argentina',
+        'duplex-grand-bourg' => 'Comodoro Rivadavia 3902, Grand Bourg, Salta, Argentina',
+        'atocha' => 'Pueblo Atocha Manzana 17 Lote 2, Salta, Argentina',
+        'galpon' => 'Galpón, Salta, Argentina',
     ];
     
     $projectCoords = [];
@@ -774,9 +781,14 @@ function cyc_child_geocode_projects(): array {
                     'guemes-1768' => ['lat' => -24.7875, 'lng' => -65.4102],
                     'guemes-1853' => ['lat' => -24.7870, 'lng' => -65.4105],
                     'libera' => ['lat' => -24.7880, 'lng' => -65.4080],
+                    'libera-torre2' => ['lat' => -24.7885, 'lng' => -65.4085], // Segunda torre cerca de la primera
                     'belgrano-office' => ['lat' => -24.7865, 'lng' => -65.4090],
                     'balcarce-2302' => ['lat' => -24.7885, 'lng' => -65.4095],
-                    'duplex-grand-bourg' => ['lat' => -34.5169, 'lng' => -58.6997],
+                    'balcarce-2320' => ['lat' => -24.7887, 'lng' => -65.4097], // Cerca de 2302
+                    'fepusa' => ['lat' => -24.7900, 'lng' => -65.4100],
+                    'duplex-grand-bourg' => ['lat' => -24.7900, 'lng' => -65.4100],
+                    'atocha' => ['lat' => -24.7900, 'lng' => -65.4100],
+                    'galpon' => ['lat' => -24.7900, 'lng' => -65.4100],
                 ];
                 
                 if (isset($fallback_coords[$slug])) {

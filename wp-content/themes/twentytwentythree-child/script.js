@@ -214,21 +214,20 @@
                 maxZoom: 19
             }).addTo(map);
 
-            // Default and hover colors
-            const defaultColor = '#2c5aa0'; // Azul para todos
-            const hoverColor = '#e76027'; // Naranja al hacer hover
+            // Default and hover colors - Colores de la empresa
+            const defaultColor = '#434955'; // Gris empresa
+            const hoverColor = '#FF6F27'; // Naranja empresa
 
-            // Create custom icon for markers
-            function createCustomIcon(color, id) {
+            // Create custom icon using company logo
+            function createCustomIcon(id) {
                 return L.divIcon({
                     className: 'custom-map-marker',
-                    html: `<svg id="marker-svg-${id}" width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path class="marker-path" d="M16 0C7.163 0 0 7.163 0 16C0 28 16 40 16 40C16 40 32 28 32 16C32 7.163 24.837 0 16 0Z" fill="${color}"/>
-                        <circle cx="16" cy="16" r="8" fill="white"/>
-                    </svg>`,
-                    iconSize: [32, 40],
-                    iconAnchor: [16, 40], // Punto inferior del marcador (centro horizontal, parte inferior)
-                    popupAnchor: [0, -40] // Popup arriba del marcador
+                    html: `<div class="logo-marker-container" id="marker-logo-${id}">
+                        <img src="/imagenes/logoCyc.png" alt="CyC" style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));" />
+                    </div>`,
+                    iconSize: [50, 50],
+                    iconAnchor: [25, 50], // Punto inferior del marcador (centro horizontal, parte inferior)
+                    popupAnchor: [0, -50] // Popup arriba del marcador
                 });
             }
 
@@ -239,10 +238,15 @@
                 { slug: 'arenales-742', address: 'Arenales 742, Salta, Argentina', title: 'Arenales 742' },
                 { slug: 'guemes-1768', address: 'Güemes 1768, Salta, Argentina', title: 'Güemes 1768' },
                 { slug: 'guemes-1853', address: 'Güemes 1853, Salta, Argentina', title: 'Güemes 1853' },
-                { slug: 'libera', address: 'Leguizamón 2073, Salta, Argentina', title: 'Edificio Libera' },
+                { slug: 'libera', address: 'Leguizamón 2073, Salta, Argentina', title: 'Edificio Libera Torre 1' },
+                { slug: 'libera-torre2', address: 'Coronel Suárez 486, Salta, Argentina', title: 'Edificio Libera Torre 2' },
                 { slug: 'belgrano-office', address: 'Belgrano 2131, Salta, Argentina', title: 'Edificio Belgrano Office' },
                 { slug: 'balcarce-2302', address: 'Balcarce 2302, Salta, Argentina', title: 'Balcarce 2302' },
-                { slug: 'duplex-grand-bourg', address: 'Grand Bourg, Buenos Aires, Argentina', title: 'Duplex Grand Bourg' }
+                { slug: 'balcarce-2320', address: 'Balcarce 2320, Salta, Argentina', title: 'Balcarce 2320' },
+                { slug: 'fepusa', address: 'FEPUSA, Salta, Argentina', title: 'FEPUSA' },
+                { slug: 'duplex-grand-bourg', address: 'Comodoro Rivadavia 3902, Grand Bourg, Salta, Argentina', title: 'Duplex Grand Bourg' },
+                { slug: 'atocha', address: 'Pueblo Atocha Manzana 17 Lote 2, Salta, Argentina', title: 'Pueblo Atocha' },
+                { slug: 'galpon', address: 'Galpón, Salta, Argentina', title: 'Galpón' }
             ];
 
             // Usar coordenadas del servidor (ya geocodificadas, sin CORS)
@@ -274,9 +278,8 @@
                         markerIndex++;
                         const currentIndex = markerIndex;
                         
-                        // Create unique icons for each marker with ID
-                        const defaultIcon = createCustomIcon(defaultColor, currentIndex);
-                        const hoverIcon = createCustomIcon(hoverColor, currentIndex);
+                        // Create unique icons for each marker using logo
+                        const defaultIcon = createCustomIcon(currentIndex);
                         
                         // Asegurar que las coordenadas sean números válidos
                         const lat = parseFloat(coords.lat);
@@ -331,30 +334,23 @@
                         setTimeout(function() {
                             const iconElement = marker.getElement();
                             if (iconElement) {
-                                const svgElement = iconElement.querySelector('svg');
-                                const pathElement = iconElement.querySelector('.marker-path');
+                                const imgElement = iconElement.querySelector('img');
                                 
-                                if (svgElement) {
+                                if (imgElement) {
                                     iconElement.style.cursor = 'pointer';
                                     
                                     // Handle hover directly on DOM element
                                     iconElement.addEventListener('mouseenter', function() {
                                         if (!popupIsOpen) {
-                                            if (pathElement) {
-                                                pathElement.setAttribute('fill', hoverColor);
-                                            } else {
-                                                marker.setIcon(hoverIcon);
-                                            }
+                                            imgElement.style.transform = 'scale(1.2)';
+                                            imgElement.style.filter = 'drop-shadow(0 4px 8px rgba(255,111,39,0.8))';
                                         }
                                     });
                                     
                                     iconElement.addEventListener('mouseleave', function() {
                                         if (!popupIsOpen) {
-                                            if (pathElement) {
-                                                pathElement.setAttribute('fill', defaultColor);
-                                            } else {
-                                                marker.setIcon(defaultIcon);
-                                            }
+                                            imgElement.style.transform = 'scale(1)';
+                                            imgElement.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))';
                                         }
                                     });
                                     
@@ -376,11 +372,10 @@
                             popupIsOpen = true;
                             const iconElement = marker.getElement();
                             if (iconElement) {
-                                const pathElement = iconElement.querySelector('.marker-path');
-                                if (pathElement) {
-                                    pathElement.setAttribute('fill', hoverColor);
-                                } else {
-                                    marker.setIcon(hoverIcon);
+                                const imgElement = iconElement.querySelector('img');
+                                if (imgElement) {
+                                    imgElement.style.transform = 'scale(1.2)';
+                                    imgElement.style.filter = 'drop-shadow(0 4px 8px rgba(255,111,39,0.8))';
                                 }
                             }
                         });
@@ -389,11 +384,10 @@
                             popupIsOpen = false;
                             const iconElement = marker.getElement();
                             if (iconElement) {
-                                const pathElement = iconElement.querySelector('.marker-path');
-                                if (pathElement) {
-                                    pathElement.setAttribute('fill', defaultColor);
-                                } else {
-                                    marker.setIcon(defaultIcon);
+                                const imgElement = iconElement.querySelector('img');
+                                if (imgElement) {
+                                    imgElement.style.transform = 'scale(1)';
+                                    imgElement.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))';
                                 }
                             }
                         });

@@ -12,8 +12,8 @@ Version: 1.0.0
 
 /* 1. CSS Variables (Tokens) */
 :root {
-    --c-primary: #2c5aa0; /* Professional Blue */
-    --c-secondary: #e76027; /* Accent Orange */
+    --c-primary: #434955; /* Gris empresa - RGB: 67/73/85, CMYK: 73/63/49/34, PANTONE 5463 U */
+    --c-secondary: #FF6F27; /* Naranja empresa - RGB: 255/111/39, CMYK: 0/70/92/0, PANTONE Orange 021 U */
     --c-text-dark: #333333;
     --c-text-light: #666666;
     --c-background-light: #f8f8f8;
@@ -27,7 +27,11 @@ Version: 1.0.0
     --c-spacing-lg: 32px;
     --c-spacing-xl: 64px;
 
-    --c-font-family-primary: 'Montserrat', sans-serif;
+    /* Tipografía Shary - Si tienes los archivos de fuente, reemplaza esta URL */
+    /* Por ahora usamos una fuente sans-serif similar hasta que se cargue Shary */
+    --c-font-family-primary: 'Shary', 'Montserrat', sans-serif;
+    --c-font-family-title: 'Shary Bold', 'Shary', 'Montserrat', sans-serif;
+    --c-font-family-text: 'Shary', 'Shary Light', 'Montserrat', sans-serif;
     --c-font-weight-light: 300;
     --c-font-weight-regular: 400;
     --c-font-weight-medium: 500;
@@ -40,16 +44,31 @@ Version: 1.0.0
     --c-transition-speed: 0.3s;
 }
 
+/* Símbolo de grado de avance */
+.c-progress-indicator {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 1.2em;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
 /* 2. Base Styles Override */
 body {
-    font-family: var(--c-font-family-primary) !important;
+    font-family: var(--c-font-family-text) !important;
+    font-weight: var(--c-font-weight-light) !important; /* Shary Light para textos */
     color: var(--c-text-dark);
     line-height: 1.6;
     background-color: var(--c-white);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--c-font-family-primary) !important;
+    font-family: var(--c-font-family-title) !important;
+    font-weight: 700 !important; /* Shary Bold */
     color: var(--c-primary);
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -159,7 +178,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(12, 27, 52, 0.85) 0%, rgba(44, 90, 160, 0.75) 40%, rgba(14, 26, 46, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(67, 73, 85, 0.85) 0%, rgba(67, 73, 85, 0.75) 40%, rgba(67, 73, 85, 0.9) 100%);
     z-index: 2;
 }
 
@@ -192,13 +211,31 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     padding: var(--c-spacing-xl);
 }
 
+.c-hero-bottom-text {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    text-align: center;
+}
+
+.c-hero-bottom-text p {
+    font-size: 1.8em;
+    font-weight: var(--c-font-weight-bold);
+    color: var(--c-white);
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    letter-spacing: 2px;
+    opacity: 0.85;
+    margin: 0;
+    padding: var(--c-spacing-md) var(--c-spacing-xl);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: var(--c-border-radius);
+}
+
 .c-hero h1 {
-    color: var(--c-white) !important;
-    font-size: 3.5em;
-    margin-bottom: var(--c-spacing-md);
-    font-weight: var(--c-font-weight-black);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-top: 0;
+    display: none; /* Ocultar título grande del centro */
 }
 
 .c-hero p {
@@ -1281,10 +1318,10 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-location-info {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--c-spacing-lg);
+    flex-wrap: nowrap;
+    gap: var(--c-spacing-md);
     margin-top: var(--c-spacing-lg);
-    max-width: 900px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     padding-bottom: var(--c-spacing-lg);
@@ -1297,6 +1334,13 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     text-align: center;
     transition: all var(--c-transition-speed) ease;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .c-location-card:hover {
@@ -2625,17 +2669,20 @@ body:not(.single-cyc-project) .wp-block-template-part:first-child.header-sticky 
     transform: scale(1.05);
 }
 
-/* Logo - Larger */
+/* Logo - Más visible */
 .wp-block-site-title a::before {
     content: '';
     display: inline-block;
-    width: 130px;
-    height: 130px;
+    width: 150px !important;
+    height: 150px !important;
+    min-width: 150px !important;
+    min-height: 150px !important;
     background-image: url('/imagenes/logoCyc.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    opacity: 1 !important;
 }
 
 /* Navigation Menu */
