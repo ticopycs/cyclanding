@@ -264,7 +264,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 /* Services Section */
 .c-services {
-    background: linear-gradient(135deg, rgba(15, 31, 58, 0.02) 0%, rgba(44, 90, 160, 0.08) 100%);
+    background: linear-gradient(135deg, rgba(67, 73, 85, 0.02) 0%, rgba(255, 111, 39, 0.08) 100%);
 }
 
 .c-services .container > p {
@@ -294,7 +294,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     border-radius: 16px;
     padding: var(--c-spacing-xl) var(--c-spacing-lg);
     text-align: center;
-    box-shadow: 0 8px 25px rgba(15, 31, 58, 0.1);
+    box-shadow: 0 8px 25px rgba(67, 73, 85, 0.12);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
@@ -324,7 +324,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, rgba(231, 96, 39, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(67, 73, 85, 0.05) 0%, rgba(255, 111, 39, 0.08) 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
     border-radius: 16px;
@@ -332,7 +332,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-service-card:hover {
     transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(44, 90, 160, 0.2);
+    box-shadow: 0 20px 50px rgba(67, 73, 85, 0.2);
 }
 
 .c-service-card:hover::after {
@@ -344,7 +344,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     height: 120px;
     margin: 0 auto var(--c-spacing-md);
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--c-primary) 0%, #1e4278 100%);
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -356,16 +356,16 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-service-card:hover .c-service-icon {
     transform: scale(1.1) rotate(5deg);
-    background: linear-gradient(135deg, var(--c-secondary) 0%, #d4551f 100%);
-    box-shadow: 0 10px 30px rgba(231, 96, 39, 0.3);
+    background: linear-gradient(135deg, var(--c-secondary) 0%, #ff8645 100%);
+    box-shadow: 0 10px 30px rgba(255, 111, 39, 0.3);
 }
 
 @keyframes pulseIcon {
     0%, 100% {
-        box-shadow: 0 0 0 0 rgba(44, 90, 160, 0.4);
+        box-shadow: 0 0 0 0 rgba(67, 73, 85, 0.4);
     }
     50% {
-        box-shadow: 0 0 0 10px rgba(44, 90, 160, 0);
+        box-shadow: 0 0 0 10px rgba(67, 73, 85, 0);
     }
 }
 
@@ -650,14 +650,14 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     border-color: var(--c-primary);
     color: var(--c-primary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.2);
+    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.2);
 }
 
 .c-filter-btn.active {
-    background: linear-gradient(135deg, var(--c-primary) 0%, #1e4278 100%);
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%);
     color: var(--c-white);
     border-color: var(--c-primary);
-    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+    box-shadow: 0 4px 15px rgba(67, 73, 85, 0.3);
 }
 
 .c-filter-btn.active:hover {
@@ -690,7 +690,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-project-card-grid:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(44, 90, 160, 0.2);
+    box-shadow: 0 8px 25px rgba(67, 73, 85, 0.2);
 }
 
 .c-project-card-image-grid {
@@ -778,7 +778,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     background-color: var(--c-secondary) !important;
     color: var(--c-white) !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.3);
 }
 
 .c-button-brochure {
@@ -803,7 +803,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     background-color: var(--c-primary);
     color: var(--c-white) !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.3);
 }
 
 /* Carousel uses grid card styles - no additional styles needed */
@@ -876,7 +876,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-project-grid .c-project-card:hover {
     transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(44, 90, 160, 0.3);
+    box-shadow: 0 12px 30px rgba(67, 73, 85, 0.3);
 }
 
 .c-project-grid .c-project-card-image {
@@ -943,7 +943,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-project-card:hover {
     transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(44, 90, 160, 0.3);
+    box-shadow: 0 12px 30px rgba(67, 73, 85, 0.3);
 }
 
 /* Ensure carousel cards as links work properly - REMOVED to prevent conflicts */
@@ -1029,7 +1029,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-badge-presale {
-    background: linear-gradient(135deg, #e76027 0%, #d84315 100%);
+    background: linear-gradient(135deg, var(--c-secondary) 0%, #ff8645 100%);
     color: white;
 }
 
@@ -1055,7 +1055,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-status-construction {
-    background: rgba(44, 90, 160, 0.95);
+    background: rgba(67, 73, 85, 0.95);
     color: white;
 }
 
@@ -1065,7 +1065,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-status-ready {
-    background: rgba(231, 96, 39, 0.95);
+    background: rgba(255, 111, 39, 0.95);
     color: white;
 }
 
@@ -1342,6 +1342,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     margin-left: auto;
     margin-right: auto;
     padding-bottom: var(--c-spacing-lg);
+    align-items: stretch;
 }
 
 .c-location-card {
@@ -1351,13 +1352,14 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     text-align: center;
     transition: all var(--c-transition-speed) ease;
-    flex: 1;
-    min-width: 250px;
-    max-width: 300px;
-    height: 100%;
+    flex: 1 1 calc(33.333% - var(--c-spacing-md));
+    min-width: 280px;
+    max-width: none;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 220px;
 }
 
 .c-location-card:hover {
@@ -1376,6 +1378,31 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     color: var(--c-text-dark);
     margin: 0;
     line-height: 1.8;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 1024px) {
+    .c-location-info {
+        flex-wrap: wrap;
+        max-width: 100%;
+    }
+
+    .c-location-card {
+        flex: 1 1 calc(50% - var(--c-spacing-md));
+        min-width: 260px;
+    }
+}
+
+@media (max-width: 640px) {
+    .c-location-info {
+        gap: var(--c-spacing-sm);
+    }
+
+    .c-location-card {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
 }
 
 /* Leaflet Map Custom Styles */
@@ -1476,9 +1503,9 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-map-popup-button:hover {
-    background-color: #d4551f;
+    background-color: #ff8645;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(231, 96, 39, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 111, 39, 0.4);
     color: var(--c-white) !important;
 }
 
@@ -1559,7 +1586,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-contact-form {
     width: 100%;
     padding: var(--c-spacing-xl);
-    background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, rgba(231, 96, 39, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(67, 73, 85, 0.05) 0%, rgba(255, 111, 39, 0.08) 100%);
     border-radius: var(--c-border-radius);
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
@@ -1591,7 +1618,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-contact-form textarea:focus {
     outline: none;
     border-color: var(--c-primary);
-    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+    box-shadow: 0 0 0 3px rgba(67, 73, 85, 0.2);
 }
 
 .c-contact-form textarea {
@@ -1691,7 +1718,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-project-detail-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, rgba(14, 26, 46, 0.92) 0%, rgba(44, 90, 160, 0.75) 60%, rgba(15, 31, 58, 0.85) 100%);
+    background: linear-gradient(120deg, rgba(33, 36, 44, 0.95) 0%, rgba(67, 73, 85, 0.85) 55%, rgba(255, 111, 39, 0.75) 100%);
     z-index: 1;
 }
 
@@ -1765,7 +1792,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     gap: 8px;
     padding: 10px 18px;
     border-radius: 999px;
-    background: rgba(231, 96, 39, 0.85);
+    background: rgba(255, 111, 39, 0.85);
     font-size: 0.85em;
     font-weight: var(--c-font-weight-semibold);
     text-transform: uppercase;
@@ -1804,10 +1831,10 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-project-detail-stats {
     display: grid;
     gap: var(--c-spacing-md);
-    background: linear-gradient(135deg, rgba(44, 90, 160, 0.08) 0%, rgba(14, 26, 46, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(67, 73, 85, 0.08) 0%, rgba(255, 111, 39, 0.05) 100%);
     border-radius: var(--c-border-radius);
     padding: var(--c-spacing-lg);
-    box-shadow: 0 12px 30px rgba(15, 31, 58, 0.08);
+    box-shadow: 0 12px 30px rgba(67, 73, 85, 0.12);
 }
 
 .c-project-detail-stat {
@@ -1834,7 +1861,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     padding: var(--c-spacing-xl);
     background: var(--c-white);
     border-radius: var(--c-border-radius);
-    box-shadow: 0 12px 30px rgba(15, 31, 58, 0.08);
+    box-shadow: 0 12px 30px rgba(67, 73, 85, 0.12);
 }
 
 .c-project-detail-highlights h3 {
@@ -1917,7 +1944,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-project-gallery-item {
     overflow: hidden;
     border-radius: var(--c-border-radius);
-    box-shadow: 0 12px 30px rgba(15, 31, 58, 0.08);
+    box-shadow: 0 12px 30px rgba(67, 73, 85, 0.12);
 }
 
 .c-project-gallery-item img {
@@ -1936,7 +1963,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-project-detail-cta {
-    background: linear-gradient(135deg, rgba(44, 90, 160, 0.1) 0%, rgba(14, 26, 46, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(67, 73, 85, 0.9) 0%, rgba(255, 111, 39, 0.9) 100%);
     color: var(--c-white);
     text-align: center;
 }
@@ -2181,7 +2208,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-button:hover {
     background-color: var(--c-secondary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.3);
 }
 
 .c-button-brochure {
@@ -2463,7 +2490,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 body.single-cyc-project .wp-block-template-part:first-child,
 body.single-cyc-project .wp-block-template-part:first-child.header-sticky {
     position: fixed !important;
-    background: linear-gradient(135deg, var(--c-primary) 0%, #1e4278 100%) !important;
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%) !important;
     backdrop-filter: blur(10px) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
@@ -2479,7 +2506,7 @@ body.single-cyc-project main.wp-block-group {
     left: 0 !important;
     right: 0 !important;
     z-index: 10000 !important;
-    background: linear-gradient(135deg, #2c5aa0 0%, #1e4278 100%) !important;
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
     display: block !important;
     visibility: visible !important;
@@ -2558,7 +2585,7 @@ body.single-cyc-project .cyc-custom-header .c-header-projects-btn:hover {
 /* Header becomes sticky and solid when scrolling past hero */
 .wp-block-template-part:first-child.header-sticky {
     position: fixed;
-    background: linear-gradient(135deg, var(--c-primary) 0%, #1e4278 100%);
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
@@ -2746,7 +2773,7 @@ body:not(.single-cyc-project) .wp-block-template-part:first-child.header-sticky 
 .wp-block-template-part:first-child .wp-block-navigation .current-menu-item a {
     background-color: var(--c-secondary);
     color: var(--c-white) !important;
-    box-shadow: 0 4px 15px rgba(231, 96, 39, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 111, 39, 0.4);
 }
 
 .wp-block-template-part:first-child .wp-block-navigation .current-menu-item a::after {
@@ -3331,6 +3358,18 @@ html {
 .wp-site-blocks {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+}
+
+body.page:not(.home) .wp-site-blocks,
+body.single-cyc-project .wp-site-blocks {
+    padding-top: 160px !important;
+}
+
+@media (max-width: 768px) {
+    body.page:not(.home) .wp-site-blocks,
+    body.single-cyc-project .wp-site-blocks {
+        padding-top: 130px !important;
+    }
 }
 
 main.wp-block-group {
