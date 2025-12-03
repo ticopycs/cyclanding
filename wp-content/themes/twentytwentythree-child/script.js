@@ -1217,6 +1217,75 @@
         // Console log to confirm script loaded
         console.log('CyC Emprendimientos - Child Theme Scripts Loaded');
         console.log('Project filters and sliders initialized');
+
+        // ============================================
+        // CUSTOM CYC HEADER - HAMBURGER MENU
+        // ============================================
+        
+        const hamburger = document.querySelector('.cyc-hamburger');
+        const mobileMenu = document.querySelector('.cyc-mobile-menu');
+        const body = document.body;
+
+        if (hamburger && mobileMenu) {
+            // Toggle mobile menu
+            hamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = mobileMenu.classList.contains('is-open');
+                
+                if (isOpen) {
+                    // Close menu
+                    mobileMenu.classList.remove('is-open');
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    body.style.overflow = '';
+                } else {
+                    // Open menu
+                    mobileMenu.classList.add('is-open');
+                    hamburger.classList.add('is-active');
+                    hamburger.setAttribute('aria-expanded', 'true');
+                    body.style.overflow = 'hidden';
+                }
+            });
+
+            // Close menu when clicking on a link inside mobile menu
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('is-open');
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    body.style.overflow = '';
+                });
+            });
+
+            // Close menu on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
+                    mobileMenu.classList.remove('is-open');
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    body.style.overflow = '';
+                }
+            });
+
+            // Close menu on window resize (if switching to desktop)
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if (window.innerWidth > 768 && mobileMenu.classList.contains('is-open')) {
+                        mobileMenu.classList.remove('is-open');
+                        hamburger.classList.remove('is-active');
+                        hamburger.setAttribute('aria-expanded', 'false');
+                        body.style.overflow = '';
+                    }
+                }, 250);
+            });
+
+            console.log('CyC Header - Hamburger menu initialized');
+        }
     });
 
 })(jQuery);

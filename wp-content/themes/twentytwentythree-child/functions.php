@@ -925,3 +925,45 @@ function cyc_child_disable_wpautop_on_homepage($content) {
 }
 // Ejecutar muy temprano para desactivar wpautop antes de que se aplique
 add_filter('the_content', 'cyc_child_disable_wpautop_on_homepage', 0);
+
+/**
+ * ============================================
+ * CUSTOM CYC HEADER FUNCTIONALITY
+ * ============================================
+ * 
+ * Inject custom header on all pages
+ */
+
+/**
+ * Inject custom header immediately after body tag
+ */
+function cyc_child_inject_custom_header() {
+    $header_file = get_stylesheet_directory() . '/header.php';
+    if (file_exists($header_file)) {
+        include($header_file);
+    }
+}
+add_action('wp_body_open', 'cyc_child_inject_custom_header', 1);
+
+/**
+ * Hide default theme header using CSS
+ */
+function cyc_child_hide_default_header() {
+    ?>
+    <style>
+        /* Hide default Twenty Twenty-Three header */
+        .wp-block-template-part:first-child,
+        .wp-site-blocks > header:not(.cyc-header),
+        header.wp-block-group:not(.cyc-header),
+        .wp-block-template-part[data-block-name="core/template-part"]:first-child {
+            display: none !important;
+        }
+        
+        /* Ensure our custom header is visible */
+        .cyc-header {
+            display: block !important;
+        }
+    </style>
+    <?php
+}
+add_action('wp_head', 'cyc_child_hide_default_header', 999);
