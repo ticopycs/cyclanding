@@ -208,26 +208,27 @@
                 zoomControl: true
             });
 
-            // Add OpenStreetMap tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19
+            // Add Dark theme tiles (CartoDB Dark Matter)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
             }).addTo(map);
 
             // Default and hover colors - Colores de la empresa
             const defaultColor = '#434955'; // Gris empresa
             const hoverColor = '#FF6F27'; // Naranja empresa
 
-            // Create custom icon using company logo
+            // Create custom icon using company logo (orange version)
             function createCustomIcon(id) {
                 return L.divIcon({
                     className: 'custom-map-marker',
                     html: `<div class="logo-marker-container" id="marker-logo-${id}">
-                        <img src="/imagenes/logoCyc.png" alt="CyC" style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));" />
+                        <img src="/imagenes/newLogoCyc.png" alt="CyC" style="width: 40px; height: 40px; filter: drop-shadow(0 3px 6px rgba(255,111,39,0.6));" />
                     </div>`,
-                    iconSize: [50, 50],
-                    iconAnchor: [25, 50], // Punto inferior del marcador (centro horizontal, parte inferior)
-                    popupAnchor: [0, -50] // Popup arriba del marcador
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 40], // Punto inferior del marcador (centro horizontal, parte inferior)
+                    popupAnchor: [0, -40] // Popup arriba del marcador
                 });
             }
 
@@ -235,18 +236,18 @@
             const projectCoords = window.cycThemeData?.projectCoords || {};
             
             const projectAddresses = [
-                { slug: 'arenales-742', address: 'Arenales 742, Salta, Argentina', title: 'Arenales 742' },
-                { slug: 'guemes-1768', address: 'Güemes 1768, Salta, Argentina', title: 'Güemes 1768' },
-                { slug: 'guemes-1853', address: 'Güemes 1853, Salta, Argentina', title: 'Güemes 1853' },
-                { slug: 'libera', address: 'Leguizamón 2073, Salta, Argentina', title: 'Edificio Libera Torre 1' },
-                { slug: 'libera-torre2', address: 'Coronel Suárez 486, Salta, Argentina', title: 'Edificio Libera Torre 2' },
-                { slug: 'belgrano-office', address: 'Belgrano 2131, Salta, Argentina', title: 'Edificio Belgrano Office' },
-                { slug: 'balcarce-2302', address: 'Balcarce 2302, Salta, Argentina', title: 'Balcarce 2302' },
-                { slug: 'balcarce-2320', address: 'Balcarce 2320, Salta, Argentina', title: 'Balcarce 2320' },
-                { slug: 'fepusa', address: 'FEPUSA, Salta, Argentina', title: 'FEPUSA' },
-                { slug: 'duplex-grand-bourg', address: 'Comodoro Rivadavia 3902, Grand Bourg, Salta, Argentina', title: 'Duplex Grand Bourg' },
-                { slug: 'atocha', address: 'Pueblo Atocha Manzana 17 Lote 2, Salta, Argentina', title: 'Pueblo Atocha' },
-                { slug: 'galpon', address: 'Galpón, Salta, Argentina', title: 'Galpón' }
+                { slug: 'arenales-742', address: 'Arenales 742, Salta Capital, Argentina', title: 'Arenales 742' },
+                { slug: 'guemes-1768', address: 'General Güemes 1768, Salta Capital, Argentina', title: 'General Güemes 1768' },
+                { slug: 'guemes-1853', address: 'General Güemes 1853, Salta Capital, Argentina', title: 'General Güemes 1853' },
+                { slug: 'libera', address: 'Leguizamón 2073 esq. Cnel. Suárez, Salta Capital, Argentina', title: 'Edificio Libera - Torre 1' },
+                { slug: 'libera-torre2', address: 'Cnel. Suárez 486 esq. Leguizamón, Salta Capital, Argentina', title: 'Edificio Libera - Torre 2' },
+                { slug: 'belgrano-office', address: 'Av. Belgrano 2131, Salta Capital, Argentina', title: 'Office Belgrano' },
+                { slug: 'balcarce-2302', address: 'Balcarce 2302, Salta Capital, Argentina', title: 'Balcarce 2302' },
+                { slug: 'balcarce-2320', address: 'Balcarce 2320, Salta Capital, Argentina', title: 'Balcarce 2320' },
+                { slug: 'duplex-grand-bourg', address: 'Comodoro Rivadavia 3902, Salta Capital, Argentina', title: 'Comodoro Rivadavia 3902' },
+                { slug: 'atocha', address: 'Pueblo Atocha M17 L2, Salta Capital, Argentina', title: 'Pueblo Atocha M17-L2' },
+                { slug: 'portal-lesser', address: 'Barrio El Huaico, Zona Norte, Salta Capital, Argentina', title: 'Portal de Lesser' },
+                { slug: 'galpon', address: 'Pasaje Pedriel 1005, Salta Capital, Argentina', title: 'Pje. Pedriel 1005' }
             ];
 
             // Usar coordenadas del servidor (ya geocodificadas, sin CORS)

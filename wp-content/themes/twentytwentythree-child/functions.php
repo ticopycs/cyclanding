@@ -737,18 +737,18 @@ add_action('after_switch_theme', 'cyc_child_flush_rewrite_rules');
 function cyc_child_geocode_projects(): array {
     // Direcciones de los proyectos
     $projectAddresses = [
-        'arenales-742' => 'Arenales 742, Salta, Argentina',
-        'guemes-1768' => 'Güemes 1768, Salta, Argentina',
-        'guemes-1853' => 'Güemes 1853, Salta, Argentina',
-        'libera' => 'Leguizamón 2073, Salta, Argentina',
-        'libera-torre2' => 'Coronel Suárez 486, Salta, Argentina', // Segunda torre de Libera
-        'belgrano-office' => 'Belgrano 2131, Salta, Argentina',
-        'balcarce-2302' => 'Balcarce 2302, Salta, Argentina',
-        'balcarce-2320' => 'Balcarce 2320, Salta, Argentina',
-        'fepusa' => 'FEPUSA, Salta, Argentina',
-        'duplex-grand-bourg' => 'Comodoro Rivadavia 3902, Grand Bourg, Salta, Argentina',
-        'atocha' => 'Pueblo Atocha Manzana 17 Lote 2, Salta, Argentina',
-        'galpon' => 'Galpón, Salta, Argentina',
+        'arenales-742' => 'Arenales 742, Salta Capital, Argentina',
+        'guemes-1768' => 'General Güemes 1768, Salta Capital, Argentina',
+        'guemes-1853' => 'General Güemes 1853, Salta Capital, Argentina',
+        'libera' => 'Leguizamón 2073 esquina Cnel. Suárez, Salta Capital, Argentina',
+        'libera-torre2' => 'Cnel. Suárez 486 esquina Leguizamón, Salta Capital, Argentina',
+        'belgrano-office' => 'Av. Belgrano 2131, Salta Capital, Argentina',
+        'balcarce-2302' => 'Balcarce 2302, Salta Capital, Argentina',
+        'balcarce-2320' => 'Balcarce 2320, Salta Capital, Argentina',
+        'duplex-grand-bourg' => 'Comodoro Rivadavia 3902, Salta Capital, Argentina',
+        'atocha' => 'Pueblo Atocha M17 L2, Salta Capital, Argentina',
+        'portal-lesser' => 'Victor Alberto Villalba y Dr. Fernando Zuñer, Barrio El Huaico, Salta Capital, Argentina',
+        'galpon' => 'Pasaje Pedriel 1005, Salta Capital, Argentina',
     ];
     
     $projectCoords = [];
@@ -774,20 +774,21 @@ function cyc_child_geocode_projects(): array {
                 // Cachear por 24 horas
                 set_transient($cache_key, $projectCoords[$slug], DAY_IN_SECONDS);
             } else {
-                // Fallback a coordenadas aproximadas si falla la geocodificación
+                // Fallback a coordenadas exactas proporcionadas
+                // Coordenadas específicas para Salta Capital
                 $fallback_coords = [
-                    'arenales-742' => ['lat' => -24.7891, 'lng' => -65.4096],
-                    'guemes-1768' => ['lat' => -24.7875, 'lng' => -65.4102],
-                    'guemes-1853' => ['lat' => -24.7870, 'lng' => -65.4105],
-                    'libera' => ['lat' => -24.7880, 'lng' => -65.4080],
-                    'libera-torre2' => ['lat' => -24.7885, 'lng' => -65.4085], // Segunda torre cerca de la primera
-                    'belgrano-office' => ['lat' => -24.7865, 'lng' => -65.4090],
-                    'balcarce-2302' => ['lat' => -24.7885, 'lng' => -65.4095],
-                    'balcarce-2320' => ['lat' => -24.7887, 'lng' => -65.4097], // Cerca de 2302
-                    'fepusa' => ['lat' => -24.7900, 'lng' => -65.4100],
-                    'duplex-grand-bourg' => ['lat' => -24.7900, 'lng' => -65.4100],
-                    'atocha' => ['lat' => -24.7900, 'lng' => -65.4100],
-                    'galpon' => ['lat' => -24.7900, 'lng' => -65.4100],
+                    'arenales-742' => ['lat' => -24.7891, 'lng' => -65.4096], // Arenales 742
+                    'guemes-1768' => ['lat' => -24.7895, 'lng' => -65.4105], // General Güemes 1768, paralela a Belgrano
+                    'guemes-1853' => ['lat' => -24.7890, 'lng' => -65.4108], // General Güemes 1853, paralela a Belgrano
+                    'libera' => ['lat' => -24.782260842676237, 'lng' => -65.43082640772647], // Leguizamón 2073 esq. Cnel. Suárez
+                    'libera-torre2' => ['lat' => -24.782372940159853, 'lng' => -65.43115630355459], // Cnel. Suárez 486 esq. Leguizamón
+                    'belgrano-office' => ['lat' => -24.7850, 'lng' => -65.4090], // Av. Belgrano 2131
+                    'balcarce-2302' => ['lat' => -24.7970, 'lng' => -65.4180], // Balcarce 2302
+                    'balcarce-2320' => ['lat' => -24.7972, 'lng' => -65.4182], // Balcarce 2320
+                    'duplex-grand-bourg' => ['lat' => -24.7650, 'lng' => -65.3950], // Comodoro Rivadavia 3902
+                    'atocha' => ['lat' => -24.8100, 'lng' => -65.4300], // Pueblo Atocha M17 L2
+                    'portal-lesser' => ['lat' => -24.716454551477373, 'lng' => -65.41334263996042], // Portal de Lesser - Barrio El Huaico, zona norte
+                    'galpon' => ['lat' => -24.75238720130724, 'lng' => -65.41124305595032], // Pasaje Pedriel 1005
                 ];
                 
                 if (isset($fallback_coords[$slug])) {

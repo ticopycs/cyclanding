@@ -1530,15 +1530,23 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     border: none !important;
     cursor: pointer !important;
     pointer-events: auto !important;
-    transition: transform 0.3s ease;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 3px 6px rgba(255, 111, 39, 0.6));
     /* NO definir position aquí - Leaflet lo maneja */
 }
 
 .custom-map-marker:hover {
-    transform: scale(1.15);
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    transform: scale(1.2);
+    filter: drop-shadow(0 6px 12px rgba(255, 111, 39, 0.9));
     z-index: 1000 !important;
+}
+
+.custom-map-marker img {
+    transition: transform 0.3s ease;
+}
+
+.custom-map-marker:hover img {
+    transform: scale(1.1);
 }
 
 /* Ensure marker container allows hover and click */
@@ -1577,6 +1585,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     padding: 20px;
     background: var(--c-white);
     min-width: 250px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .c-map-popup-title {
@@ -1598,7 +1607,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-map-popup-button {
     display: inline-block;
-    background-color: var(--c-secondary);
+    background-color: var(--c-primary);
     color: var(--c-white) !important;
     padding: 12px 24px;
     border-radius: 8px;
@@ -1614,7 +1623,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-map-popup-button:hover {
-    background-color: #ff8645;
+    background-color: var(--c-secondary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 111, 39, 0.4);
     color: var(--c-white) !important;
