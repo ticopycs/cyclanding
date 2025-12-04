@@ -18,7 +18,7 @@
 
         <!-- Social Media Icons (Column 3 - Right) -->
         <div class="cyc-social-icons">
-            <a href="https://wa.me/543874067676" 
+            <a href="https://wa.me/5493875058555" 
                target="_blank" 
                rel="noopener noreferrer" 
                class="cyc-social-link"
@@ -51,7 +51,7 @@
         <nav class="cyc-mobile-nav">
             <a href="/proyectos" class="cyc-mobile-cta">PROYECTOS</a>
             <div class="cyc-mobile-social">
-                <a href="https://wa.me/543874067676" 
+                <a href="https://wa.me/5493875058555" 
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="cyc-social-link"

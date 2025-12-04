@@ -93,6 +93,17 @@ body {
     background-color: var(--c-white);
 }
 
+/* Remove any spacing from page content containers */
+body.page main,
+body.page article,
+body.page .entry-content,
+body.single main,
+body.single article,
+body.single .entry-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
 h1,
 h2,
 h3,
@@ -471,6 +482,12 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     background-color: var(--c-white);
 }
 
+/* Projects Page - Remove all spacing */
+.c-projects-page.c-section {
+    padding: 0 0 var(--c-spacing-md) 0 !important;
+    margin: 0 !important;
+}
+
 .c-section.bg-light {
     background-color: var(--c-background-light);
 }
@@ -706,56 +723,162 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     will-change: transform;
 }
 
-/* Project Filters */
-.c-project-filters-wrapper {
-    min-width: 200px;
-    position: sticky;
-    top: 80px;
+/* Projects Page Styles */
+.c-projects-page {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
 }
 
-.c-project-filters {
+.c-projects-page .container {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Remove extra spacing from WordPress containers on proyectos page */
+body:not(.home) .c-projects-page .container {
+    padding-top: 0 !important;
+}
+
+body:not(.home) main .c-projects-page {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Additional overrides for proyectos page spacing */
+.page .c-projects-page,
+.page-template .c-projects-page,
+article .c-projects-page {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.c-projects-page.c-section {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Override any WordPress default spacing */
+.entry-content > .c-projects-page:first-child {
+    margin-top: 0 !important;
+}
+
+main > .c-projects-page:first-child,
+article > .c-projects-page:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.c-projects-header-wrapper {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--c-spacing-lg);
+    margin-bottom: var(--c-spacing-xl);
+}
+
+.c-projects-title-section {
+    flex: 1;
+}
+
+.c-projects-page h1 {
+    margin-top: 0;
+    margin-bottom: var(--c-spacing-sm);
+    color: var(--c-secondary);
+    text-align: left;
+}
+
+.c-projects-subtitle {
+    color: var(--c-text-light);
+    font-size: 1.1em;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+/* Project Filters - Top Right Corner */
+.c-project-filters-horizontal {
+    display: flex;
+    align-items: center;
     gap: var(--c-spacing-sm);
-    padding: var(--c-spacing-md);
-    background-color: var(--c-background-light);
-    border-radius: var(--c-border-radius);
+    padding: var(--c-spacing-sm);
+    background: linear-gradient(135deg, rgba(255, 111, 39, 0.08) 0%, rgba(67, 73, 85, 0.08) 100%);
+    border-radius: 50px;
+    flex-shrink: 0;
 }
 
 .c-filter-btn {
-    padding: 8px 16px;
+    padding: 10px 20px;
     background-color: var(--c-white);
     color: var(--c-text-dark);
     border: 2px solid var(--c-border);
     border-radius: 50px;
-    font-weight: var(--c-font-weight-semibold);
-    font-size: 0.85em;
+    font-weight: var(--c-font-weight-bold);
+    font-size: 0.9em;
     cursor: pointer;
     transition: all var(--c-transition-speed) ease;
     font-family: var(--c-font-family-primary);
-    text-align: left;
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.c-filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 111, 39, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.c-filter-btn:hover::before {
     width: 100%;
+    height: 100%;
 }
 
 .c-filter-btn:hover {
     border-color: var(--c-primary);
     color: var(--c-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 111, 39, 0.3);
 }
 
 .c-filter-btn.active {
-    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%);
+    background: linear-gradient(135deg, var(--c-primary) 0%, #ff8645 100%);
     color: var(--c-white);
     border-color: var(--c-primary);
-    box-shadow: 0 4px 15px rgba(67, 73, 85, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 111, 39, 0.4);
 }
 
 .c-filter-btn.active:hover {
-    transform: translateY(-2px) scale(1.05);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 111, 39, 0.5);
 }
 
-/* Project Grid */
+/* Project Grid - Page View (3 columns) */
+.c-project-grid-page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--c-spacing-lg);
+    max-width: 100%;
+    margin: var(--c-spacing-xl) 0 0 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Ensure exactly 3 columns on desktop */
+@media (min-width: 993px) {
+    .c-project-grid-page {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Legacy Project Grid */
 .c-project-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -769,7 +892,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     width: 100%;
     max-width: 400px;
     background-color: var(--c-white);
-    border-radius: var(--c-border-radius);
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -777,6 +900,14 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     flex-direction: column;
     margin: 0 auto;
     height: fit-content;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Cards in project page grid - no max-width, fixed width for 3 columns */
+.c-project-grid-page .c-project-card-grid {
+    max-width: none;
+    width: 100%;
 }
 
 .c-project-card-grid:hover {
@@ -784,17 +915,21 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     box-shadow: 0 8px 25px rgba(67, 73, 85, 0.2);
 }
 
+.c-project-card-grid:hover .c-project-card-image-grid {
+    transform: scale(1.05);
+}
+
 .c-project-card-image-grid {
     width: 100%;
-    height: 250px;
+    height: 220px;
     object-fit: cover;
+    transition: transform 0.3s ease;
     display: block;
     background-color: #f0f0f0;
 }
 
 .c-project-card-grid:hover .c-project-card-image-grid {
     transform: scale(1.05);
-    transition: transform 0.3s ease;
 }
 
 .c-project-card-content-grid {
@@ -804,6 +939,16 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     flex-direction: column;
     gap: var(--c-spacing-sm);
     justify-content: flex-start;
+}
+
+/* Container for buttons in project cards */
+.c-project-card-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: var(--c-spacing-sm);
+    margin-top: auto;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .c-project-card-content-grid .c-button-grid,
@@ -874,27 +1019,36 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-button-brochure {
     display: inline-block !important;
-    padding: 12px 24px;
-    background-color: transparent;
+    padding: 10px 18px !important;
+    background-color: transparent !important;
     color: var(--c-primary) !important;
-    text-decoration: none;
-    border: 2px solid var(--c-primary);
-    border-radius: 50px;
-    font-weight: var(--c-font-weight-semibold);
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 0;
-    transition: all 0.3s ease;
-    width: fit-content;
+    text-decoration: none !important;
+    border: 2px solid var(--c-primary) !important;
+    border-radius: 50px !important;
+    font-weight: var(--c-font-weight-semibold) !important;
+    text-align: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    transition: all 0.3s ease !important;
+    width: fit-content !important;
     visibility: visible !important;
     opacity: 1 !important;
+    cursor: pointer !important;
+    font-size: 0.85em !important;
+    white-space: nowrap !important;
 }
 
 .c-button-brochure:hover {
-    background-color: var(--c-primary);
+    background-color: var(--c-primary) !important;
     color: var(--c-white) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.3);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.3) !important;
+}
+
+/* Adjust primary button width in cards with brochure */
+.c-project-card-buttons .c-button-grid {
+    width: fit-content !important;
+    flex: 0 0 auto !important;
 }
 
 /* Carousel uses grid card styles - no additional styles needed */
@@ -1446,9 +1600,9 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
-    gap: var(--c-spacing-md);
-    margin-top: var(--c-spacing-lg);
-    max-width: 1000px;
+    gap: var(--c-spacing-lg);
+    margin-top: var(--c-spacing-xl);
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     padding-bottom: var(--c-spacing-lg);
@@ -1456,32 +1610,104 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-location-card {
-    background-color: var(--c-white);
-    padding: var(--c-spacing-lg);
-    border-radius: var(--c-border-radius);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, var(--c-white) 0%, rgba(255, 111, 39, 0.05) 100%);
+    padding: var(--c-spacing-xl) var(--c-spacing-lg);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: all var(--c-transition-speed) ease;
-    flex: 1 1 calc(33.333% - var(--c-spacing-md));
+    flex: 1 1 calc(33.333% - var(--c-spacing-lg));
     min-width: 280px;
     max-width: none;
     height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 220px;
+    align-items: center;
+    min-height: 260px;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.c-location-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-secondary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.c-location-card:hover::before {
+    opacity: 1;
 }
 
 .c-location-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(255, 111, 39, 0.25);
+    border-color: var(--c-primary);
+}
+
+/* Highlighted contact card */
+.c-location-card-highlight {
+    background: linear-gradient(135deg, var(--c-primary) 0%, #ff8645 100%);
+    border: none;
+}
+
+.c-location-card-highlight h4,
+.c-location-card-highlight p,
+.c-location-card-highlight .c-location-link {
+    color: var(--c-white) !important;
+}
+
+.c-location-card-highlight .c-location-card-icon {
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.c-location-card-highlight .c-location-card-icon svg {
+    fill: var(--c-white);
+}
+
+.c-location-card-highlight:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(255, 111, 39, 0.4);
+}
+
+/* Icon for location cards */
+.c-location-card-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--c-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--c-spacing-md);
+    transition: all 0.3s ease;
+}
+
+.c-location-card-icon svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--c-white);
+}
+
+.c-location-card:hover .c-location-card-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 15px rgba(255, 111, 39, 0.4);
 }
 
 .c-location-card h4 {
-    color: var(--c-primary);
-    font-size: 1.3em;
+    color: var(--c-secondary);
+    font-size: 1.4em;
     margin-top: 0;
     margin-bottom: var(--c-spacing-md);
+    font-weight: var(--c-font-weight-bold);
 }
 
 .c-location-card p {
@@ -1490,28 +1716,60 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     line-height: 1.8;
     word-break: break-word;
     overflow-wrap: anywhere;
+    font-size: 1em;
+}
+
+/* Links in location cards */
+.c-location-link {
+    color: var(--c-primary);
+    text-decoration: none;
+    font-weight: var(--c-font-weight-semibold);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.c-location-link:hover {
+    color: var(--c-secondary);
+    transform: translateX(3px);
+}
+
+.c-location-card-highlight .c-location-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
 }
 
 @media (max-width: 1024px) {
     .c-location-info {
         flex-wrap: wrap;
         max-width: 100%;
+        gap: var(--c-spacing-md);
     }
 
     .c-location-card {
         flex: 1 1 calc(50% - var(--c-spacing-md));
-        min-width: 260px;
+        min-width: 280px;
     }
 }
 
 @media (max-width: 640px) {
     .c-location-info {
-        gap: var(--c-spacing-sm);
+        gap: var(--c-spacing-md);
     }
 
     .c-location-card {
         flex: 1 1 100%;
         min-width: 100%;
+        min-height: 220px;
+    }
+
+    .c-location-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .c-location-card-icon svg {
+        width: 25px;
+        height: 25px;
     }
 }
 
@@ -3819,10 +4077,11 @@ body {
 }
 
 /* Add margin to main content, but not when there's a hero section */
-body:not(.home) .wp-site-blocks,
+/* Removed to eliminate white space on proyectos page */
+/* body:not(.home) .wp-site-blocks,
 body:not(.home) main {
     margin-top: 82px;
-}
+} */
 
 /* Hero section should start right below the header */
 .c-hero {
@@ -3955,6 +4214,68 @@ body:not(.home) main {
 .cyc-social-link:focus {
     outline: 2px solid #434955;
     outline-offset: 2px;
+}
+
+/* Project Page - Responsive Grid */
+@media (max-width: 992px) {
+    .c-project-grid-page {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--c-spacing-md);
+    }
+    
+    .c-projects-header-wrapper {
+        flex-direction: column;
+        gap: var(--c-spacing-md);
+    }
+    
+    .c-project-filters-horizontal {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .c-project-grid-page {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .c-projects-header-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .c-project-filters-horizontal {
+        align-self: stretch;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .c-project-grid-page {
+        grid-template-columns: 1fr;
+    }
+    
+    .c-project-filters-horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        border-radius: 16px;
+        padding: var(--c-spacing-md);
+        width: 100%;
+    }
+    
+    .c-filter-btn {
+        flex: 1 1 auto;
+        min-width: 120px;
+    }
+    
+    .c-projects-page h1 {
+        font-size: 1.8em;
+        text-align: center;
+    }
+    
+    .c-projects-subtitle {
+        text-align: center;
+    }
 }
 
 /* Print Styles */

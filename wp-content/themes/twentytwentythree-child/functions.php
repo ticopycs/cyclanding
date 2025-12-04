@@ -928,6 +928,35 @@ function cyc_child_disable_wpautop_on_homepage($content) {
 add_filter('the_content', 'cyc_child_disable_wpautop_on_homepage', 0);
 
 /**
+ * Load proyectos page content from HTML file automatically
+ */
+function cyc_child_load_proyectos_from_file($content) {
+    // Check if this is the proyectos page
+    global $post;
+    
+    if (!is_admin() && isset($post->post_name) && $post->post_name === 'proyectos' && in_the_loop() && is_main_query()) {
+        $file_path = get_stylesheet_directory() . '/proyectos_full_content.html';
+        
+        if (file_exists($file_path)) {
+            // Read the HTML file
+            $html_content = file_get_contents($file_path);
+            
+            if ($html_content !== false) {
+                // Disable wpautop and wptexturize for this page
+                remove_filter('the_content', 'wpautop');
+                remove_filter('the_content', 'wptexturize');
+                
+                // Return the HTML content
+                return $html_content;
+            }
+        }
+    }
+    
+    return $content;
+}
+add_filter('the_content', 'cyc_child_load_proyectos_from_file', 1);
+
+/**
  * ============================================
  * CUSTOM CYC HEADER FUNCTIONALITY
  * ============================================
