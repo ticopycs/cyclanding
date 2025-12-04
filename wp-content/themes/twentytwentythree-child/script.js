@@ -1115,7 +1115,7 @@
         let currentImageIndex = 0;
         let imageUrls = [];
 
-        // Collect all image URLs
+        // Collect all image URLs and apply dynamic grid layout
         if (galleryItems.length > 0) {
             galleryItems.forEach(item => {
                 const url = item.getAttribute('data-image-url');
@@ -1125,6 +1125,26 @@
             });
             if (modalTotal) {
                 modalTotal.textContent = imageUrls.length;
+            }
+
+            // Apply dynamic grid layout based on image count
+            const galleryGrid = document.querySelector('.c-project-gallery-grid');
+            if (galleryGrid) {
+                const imageCount = galleryItems.length;
+                galleryGrid.setAttribute('data-count', imageCount);
+                
+                // Add staggered fade-in animation for gallery items
+                galleryItems.forEach((item, index) => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, index * 80);
+                });
+
+                console.log(`Dynamic gallery initialized with ${imageCount} images`);
             }
         }
 

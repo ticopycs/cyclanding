@@ -141,7 +141,7 @@ add_filter('body_class', function($classes) {
     </div>
 </header>
 
-<main class="c-project-detail-page" style="padding-top: 100px;">
+<main class="c-project-detail-page" style="padding-top: 80px;">
     <!-- Image Gallery Modal -->
     <div id="c-image-modal" class="c-image-modal" style="display: none;">
         <span class="c-modal-close">&times;</span>
@@ -179,14 +179,21 @@ add_filter('body_class', function($classes) {
                 <!-- Title and Status -->
                 <div class="c-project-header">
                     <h1><?php echo esc_html($title); ?></h1>
-                    <?php if ($stage_label) : ?>
-                        <span class="c-project-status">
-                            <?php echo esc_html($stage_label); ?>
-                            <?php if ($stage === 'en-construccion' || $stage === 'en-desarrollo') : ?>
-                                <span class="c-progress-indicator" title="Grado de avance">⚡</span>
-                            <?php endif; ?>
-                        </span>
-                    <?php endif; ?>
+                    <div class="c-project-status-wrapper">
+                        <?php if ($stage_label) : ?>
+                            <span class="c-project-status">
+                                <?php echo esc_html($stage_label); ?>
+                                <?php if ($stage === 'en-construccion' || $stage === 'en-desarrollo') : ?>
+                                    <span class="c-progress-indicator" title="Grado de avance">⚡</span>
+                                <?php endif; ?>
+                            </span>
+                        <?php endif; ?>
+                        <?php if (($stage === 'en-construccion' || $stage === 'en-desarrollo') && $investment_link) : ?>
+                            <a href="<?php echo esc_url($investment_link); ?>" class="c-button c-button-invest-mini" target="_blank" rel="noopener noreferrer" title="Invertir en este proyecto">
+                                Invertir
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <!-- Description -->
@@ -257,21 +264,24 @@ add_filter('body_class', function($classes) {
 
                 <!-- Action Buttons -->
                 <div class="c-project-actions">
-                    <?php if ($stage === 'en-construccion' || $stage === 'en-desarrollo') : ?>
-                        <?php if ($brochure) : ?>
+                    <!-- Primera fila: Descargar Brochure + WhatsApp -->
+                    <div class="c-project-actions-row">
+                        <?php if (($stage === 'en-construccion' || $stage === 'en-desarrollo') && $brochure) : ?>
                             <a href="<?php echo esc_url($brochure); ?>" class="c-button c-button-brochure" download target="_blank">
-                                Descargar Brochure
+                                Descargar<br>Brochure
                             </a>
                         <?php endif; ?>
-                        <?php if ($investment_link) : ?>
-                            <a href="<?php echo esc_url($investment_link); ?>" class="c-button c-button-invest" target="_blank" rel="noopener noreferrer">
-                                Invertir
-                            </a>
-                        <?php endif; ?>
+                        <a href="<?php echo esc_url($whatsapp_contact); ?>" class="c-button c-button-whatsapp" target="_blank" rel="noopener noreferrer">
+                            Contactar por WhatsApp
+                        </a>
+                    </div>
+                    
+                    <!-- Segunda fila: Invertir (full width) -->
+                    <?php if (($stage === 'en-construccion' || $stage === 'en-desarrollo') && $investment_link) : ?>
+                        <a href="<?php echo esc_url($investment_link); ?>" class="c-button c-button-invest c-button-invest-full" target="_blank" rel="noopener noreferrer">
+                            Invertir en este Proyecto
+                        </a>
                     <?php endif; ?>
-                    <a href="<?php echo esc_url($whatsapp_contact); ?>" class="c-button c-button-whatsapp" target="_blank" rel="noopener noreferrer">
-                        Contactar por WhatsApp
-                    </a>
                 </div>
 
                 <!-- Share Section -->
