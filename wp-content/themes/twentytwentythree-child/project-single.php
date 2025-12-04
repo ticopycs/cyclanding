@@ -142,13 +142,17 @@ add_filter('body_class', function($classes) {
 </header>
 
 <main class="c-project-detail-page" style="padding-top: 80px;">
-    <!-- Image Gallery Modal -->
+    <!-- Image & Video Gallery Modal -->
     <div id="c-image-modal" class="c-image-modal" style="display: none;">
         <span class="c-modal-close">&times;</span>
         <span class="c-modal-prev">‹</span>
         <span class="c-modal-next">›</span>
-        <div class="c-modal-image-container">
-            <img id="c-modal-image" src="" alt="">
+        <div class="c-modal-media-container">
+            <img id="c-modal-image" src="" alt="" style="display: none;">
+            <video id="c-modal-video" controls style="display: none; width: 100%; max-height: 90vh;">
+                <source src="" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
         </div>
         <div class="c-modal-counter">
             <span id="c-modal-current">1</span> / <span id="c-modal-total">1</span>
@@ -158,11 +162,40 @@ add_filter('body_class', function($classes) {
     <div class="c-project-detail-container">
         <!-- Left Side: Gallery -->
         <div class="c-project-gallery-side">
-            <?php if (!empty($gallery)) : ?>
+            <?php if (!empty($gallery)) : 
+                // Normalize gallery items: convert simple URLs to array format
+                $normalized_gallery = [];
+                foreach ($gallery as $item) {
+                    if (is_array($item) && isset($item['type']) && isset($item['url'])) {
+                        $normalized_gallery[] = $item;
+                    } else {
+                        // Old format: just a URL string
+                        $normalized_gallery[] = ['type' => 'image', 'url' => $item];
+                    }
+                }
+            ?>
                 <div class="c-project-gallery-grid">
-                    <?php foreach ($gallery as $index => $image_url) : ?>
-                        <div class="c-project-gallery-item" data-image-index="<?php echo $index; ?>" data-image-url="<?php echo esc_url($image_url); ?>">
-                            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy">
+                    <?php foreach ($normalized_gallery as $index => $item) : 
+                        $item_type = $item['type'] ?? 'image';
+                        $item_url = $item['url'] ?? '';
+                        $is_video = $item_type === 'video';
+                    ?>
+                        <div class="c-project-gallery-item <?php echo $is_video ? 'c-gallery-video' : ''; ?>" 
+                             data-media-index="<?php echo $index; ?>" 
+                             data-media-type="<?php echo esc_attr($item_type); ?>"
+                             data-media-url="<?php echo esc_url($item_url); ?>">
+                            <?php if ($is_video) : ?>
+                                <video class="c-gallery-video-thumbnail" preload="metadata">
+                                    <source src="<?php echo esc_url($item_url); ?>" type="video/mp4">
+                                </video>
+                                <div class="c-gallery-video-overlay">
+                                    <svg class="c-play-icon" width="60" height="60" viewBox="0 0 24 24" fill="white">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            <?php else : ?>
+                                <img src="<?php echo esc_url($item_url); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy">
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>

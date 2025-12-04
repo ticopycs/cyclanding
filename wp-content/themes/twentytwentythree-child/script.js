@@ -1102,9 +1102,10 @@
             });
         }
 
-        // Image Modal for Project Detail Pages
+        // Image & Video Modal for Project Detail Pages
         const imageModal = document.getElementById('c-image-modal');
         const modalImage = document.getElementById('c-modal-image');
+        const modalVideo = document.getElementById('c-modal-video');
         const modalClose = document.querySelector('.c-modal-close');
         const modalPrev = document.querySelector('.c-modal-prev');
         const modalNext = document.querySelector('.c-modal-next');
@@ -1112,26 +1113,30 @@
         const modalTotal = document.getElementById('c-modal-total');
         const galleryItems = document.querySelectorAll('.c-project-gallery-item');
         
-        let currentImageIndex = 0;
-        let imageUrls = [];
+        let currentMediaIndex = 0;
+        let mediaItems = [];
 
-        // Collect all image URLs and apply dynamic grid layout
+        // Collect all media items (images and videos) and apply dynamic grid layout
         if (galleryItems.length > 0) {
             galleryItems.forEach(item => {
-                const url = item.getAttribute('data-image-url');
-                if (url) {
-                    imageUrls.push(url);
+                const mediaType = item.getAttribute('data-media-type') || 'image';
+                const mediaUrl = item.getAttribute('data-media-url') || item.getAttribute('data-image-url');
+                if (mediaUrl) {
+                    mediaItems.push({
+                        type: mediaType,
+                        url: mediaUrl
+                    });
                 }
             });
             if (modalTotal) {
-                modalTotal.textContent = imageUrls.length;
+                modalTotal.textContent = mediaItems.length;
             }
 
-            // Apply dynamic grid layout based on image count
+            // Apply dynamic grid layout based on media count
             const galleryGrid = document.querySelector('.c-project-gallery-grid');
             if (galleryGrid) {
-                const imageCount = galleryItems.length;
-                galleryGrid.setAttribute('data-count', imageCount);
+                const mediaCount = galleryItems.length;
+                galleryGrid.setAttribute('data-count', mediaCount);
                 
                 // Add staggered fade-in animation for gallery items
                 galleryItems.forEach((item, index) => {
@@ -1144,16 +1149,16 @@
                     }, index * 80);
                 });
 
-                console.log(`Dynamic gallery initialized with ${imageCount} images`);
+                console.log(`Dynamic gallery initialized with ${mediaCount} media items`);
             }
         }
 
-        // Open modal with image
+        // Open modal with media (image or video)
         function openModal(index) {
-            if (!imageModal || imageUrls.length === 0) return;
+            if (!imageModal || mediaItems.length === 0) return;
             
-            currentImageIndex = index;
-            updateModalImage();
+            currentMediaIndex = index;
+            updateModalMedia();
             imageModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
@@ -1161,36 +1166,64 @@
         // Close modal
         function closeModal() {
             if (!imageModal) return;
+            if (modalVideo) {
+                modalVideo.pause();
+                modalVideo.currentTime = 0;
+            }
             imageModal.style.display = 'none';
             document.body.style.overflow = '';
         }
 
-        // Update modal image
-        function updateModalImage() {
-            if (!modalImage || imageUrls.length === 0) return;
+        // Update modal media (image or video)
+        function updateModalMedia() {
+            if (mediaItems.length === 0) return;
             
-            if (currentImageIndex < 0) {
-                currentImageIndex = imageUrls.length - 1;
-            } else if (currentImageIndex >= imageUrls.length) {
-                currentImageIndex = 0;
+            if (currentMediaIndex < 0) {
+                currentMediaIndex = mediaItems.length - 1;
+            } else if (currentMediaIndex >= mediaItems.length) {
+                currentMediaIndex = 0;
             }
             
-            modalImage.src = imageUrls[currentImageIndex];
+            const currentMedia = mediaItems[currentMediaIndex];
+            
+            if (currentMedia.type === 'video') {
+                // Show video, hide image
+                if (modalImage) modalImage.style.display = 'none';
+                if (modalVideo) {
+                    modalVideo.style.display = 'block';
+                    modalVideo.querySelector('source').src = currentMedia.url;
+                    modalVideo.load();
+                }
+            } else {
+                // Show image, hide video
+                if (modalVideo) {
+                    modalVideo.pause();
+                    modalVideo.currentTime = 0;
+                    modalVideo.style.display = 'none';
+                }
+                if (modalImage) {
+                    modalImage.style.display = 'block';
+                    modalImage.src = currentMedia.url;
+                }
+            }
+            
             if (modalCurrent) {
-                modalCurrent.textContent = currentImageIndex + 1;
+                modalCurrent.textContent = currentMediaIndex + 1;
             }
         }
 
-        // Navigate to previous image
-        function prevImage() {
-            currentImageIndex--;
-            updateModalImage();
+        // Navigate to previous media
+        function prevMedia() {
+            if (modalVideo) modalVideo.pause();
+            currentMediaIndex--;
+            updateModalMedia();
         }
 
-        // Navigate to next image
-        function nextImage() {
-            currentImageIndex++;
-            updateModalImage();
+        // Navigate to next media
+        function nextMedia() {
+            if (modalVideo) modalVideo.pause();
+            currentMediaIndex++;
+            updateModalMedia();
         }
 
         // Event listeners for gallery items
@@ -1206,11 +1239,11 @@
         }
 
         if (modalPrev) {
-            modalPrev.addEventListener('click', prevImage);
+            modalPrev.addEventListener('click', prevMedia);
         }
 
         if (modalNext) {
-            modalNext.addEventListener('click', nextImage);
+            modalNext.addEventListener('click', nextMedia);
         }
 
         // Close modal on background click
@@ -1228,9 +1261,9 @@
                 if (e.key === 'Escape') {
                     closeModal();
                 } else if (e.key === 'ArrowLeft') {
-                    prevImage();
+                    prevMedia();
                 } else if (e.key === 'ArrowRight') {
-                    nextImage();
+                    nextMedia();
                 }
             }
         });

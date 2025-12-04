@@ -2651,6 +2651,55 @@ article > .c-projects-page:first-child {
     background: linear-gradient(135deg, rgba(204, 204, 204, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
 }
 
+/* Video Gallery Items */
+.c-gallery-video {
+    position: relative;
+    cursor: pointer;
+}
+
+.c-gallery-video-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(85%) brightness(0.9) contrast(1.05);
+    transition: all 0.5s ease;
+}
+
+.c-gallery-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+}
+
+.c-play-icon {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.c-gallery-video:hover .c-gallery-video-thumbnail {
+    filter: grayscale(0%) brightness(1) contrast(1.15);
+    transform: scale(1.1) rotate(1deg);
+}
+
+.c-gallery-video:hover .c-gallery-video-overlay {
+    background: rgba(255, 111, 39, 0.4);
+}
+
+.c-gallery-video:hover .c-play-icon {
+    transform: scale(1.2);
+}
+
 .c-project-gallery-placeholder {
     display: flex;
     align-items: center;
