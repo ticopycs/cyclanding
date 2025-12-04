@@ -3790,14 +3790,14 @@ html {
 
 body.page:not(.home) .wp-site-blocks,
 body.single-cyc-project .wp-site-blocks {
-    padding-top: 160px !important;
+    padding-top: 80px !important;
 }
 
 @media (max-width: 768px) {
 
     body.page:not(.home) .wp-site-blocks,
     body.single-cyc-project .wp-site-blocks {
-        padding-top: 130px !important;
+        padding-top: 80px !important;
     }
 }
 
