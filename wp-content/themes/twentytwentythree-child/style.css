@@ -276,25 +276,22 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 
 .c-hero-bottom-text {
     position: absolute;
-    bottom: 40px;
+    bottom: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 50%);
     z-index: 3;
     text-align: center;
 }
 
 .c-hero-bottom-text p {
-    font-size: 1.8em;
-    font-weight: var(--c-font-weight-bold);
+    font-size: 2.4em;
+    font-weight: var(--c-font-weight-extrabold);
     color: var(--c-white);
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-    letter-spacing: 2px;
-    opacity: 0.85;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+    letter-spacing: 3px;
+    opacity: 1;
     margin: 0;
-    padding: var(--c-spacing-md) var(--c-spacing-xl);
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    border-radius: var(--c-border-radius);
+    padding: 0;
 }
 
 .c-hero h1 {
@@ -317,6 +314,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-services .container>p {
     max-width: 700px;
     margin: 0 auto;
+    margin-bottom: var(--c-spacing-lg);
     color: var(--c-text-light);
 }
 
@@ -324,7 +322,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--c-spacing-lg);
-    margin-top: var(--c-spacing-md);
+    margin-top: var(--c-spacing-lg);
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -485,15 +483,19 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-carousel-container {
     position: relative;
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 60px;
+    margin: var(--c-spacing-lg) auto;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .c-carousel-wrapper {
     position: relative;
-    width: 100%;
+    width: 1232px;
+    max-width: calc(100% - 120px);
     overflow: hidden;
+    margin: 0 auto;
 }
 
 .c-carousel-track {
@@ -507,11 +509,11 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     animation-play-state: paused;
 }
 
-/* Carousel uses same cards as grid page - Ensure structure is maintained */
+/* Carousel uses same cards as grid page - Optimized for 4 cards display */
 .c-carousel-container .c-carousel-track .c-project-card-grid {
-    width: 350px !important;
-    min-width: 350px !important;
-    max-width: 350px !important;
+    width: 290px !important;
+    min-width: 290px !important;
+    max-width: 290px !important;
     flex-shrink: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -526,14 +528,20 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     padding: 0 !important;
     height: auto !important;
     box-sizing: border-box !important;
+    transition: all 0.3s ease !important;
+}
+
+.c-carousel-container .c-carousel-track .c-project-card-grid:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(67, 73, 85, 0.2) !important;
 }
 
 .c-carousel-container .c-carousel-track .c-project-card-grid>img,
 .c-carousel-container .c-carousel-track .c-project-card-grid>.c-project-card-image-grid {
     width: 100% !important;
-    height: 250px !important;
-    min-height: 250px !important;
-    max-height: 250px !important;
+    height: 220px !important;
+    min-height: 220px !important;
+    max-height: 220px !important;
     object-fit: cover !important;
     display: block !important;
     background-color: #f0f0f0 !important;
@@ -541,6 +549,11 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
+    transition: transform 0.3s ease !important;
+}
+
+.c-carousel-container .c-carousel-track .c-project-card-grid:hover .c-project-card-image-grid {
+    transform: scale(1.05);
 }
 
 .c-carousel-container .c-carousel-track .c-project-card-grid>.c-project-card-content-grid {
@@ -555,15 +568,30 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-carousel-container .c-carousel-track .c-project-card-grid .c-project-card-content-grid h3 {
-    margin: 0 !important;
+    margin: 0 0 0.5em 0 !important;
     padding: 0 !important;
     display: block !important;
+    font-size: 1.25em !important;
+    color: var(--c-primary) !important;
+    font-weight: var(--c-font-weight-bold) !important;
 }
 
-.c-carousel-container .c-carousel-track .c-project-card-grid .c-project-card-content-grid p {
-    margin: 0.5em 0 !important;
+.c-carousel-container .c-carousel-track .c-project-card-grid .c-project-card-content-grid .c-project-card-desc {
+    margin: 0 0 0.5em 0 !important;
     padding: 0 !important;
     display: block !important;
+    font-size: 0.9em !important;
+    color: var(--c-text-light) !important;
+    line-height: 1.5 !important;
+}
+
+.c-carousel-container .c-carousel-track .c-project-card-grid .c-project-card-content-grid .c-project-card-location {
+    margin: 0 0 1em 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    font-size: 0.9em !important;
+    color: var(--c-text-dark) !important;
+    font-weight: var(--c-font-weight-bold) !important;
 }
 
 .c-carousel-container .c-carousel-track .c-project-card-grid .c-button-grid {
@@ -600,20 +628,20 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 }
 
 .c-carousel-prev {
-    left: 10px;
+    left: -60px;
 }
 
 .c-carousel-next {
-    right: 10px;
+    right: -60px;
 }
 
 /* --- Fix duro: asegurar layout vertical SOLO en el carrusel --- */
 .c-carousel-container .c-project-card-grid {
     display: flex !important;
     flex-direction: column !important;
-    width: 350px !important;
-    min-width: 350px !important;
-    max-width: 350px !important;
+    width: 290px !important;
+    min-width: 290px !important;
+    max-width: 290px !important;
     flex-shrink: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -3182,20 +3210,22 @@ html {
         padding: var(--c-spacing-md);
     }
 
-    /* Carousel - Mobile */
+    /* Carousel - Mobile (2 cards visible) */
     .c-carousel-container {
-        padding: var(--c-spacing-md) 50px var(--c-spacing-md) 50px;
-        margin: var(--c-spacing-md) 0;
+        padding: var(--c-spacing-md) 50px;
+        margin: var(--c-spacing-md) auto;
     }
 
     .c-carousel-container .c-project-card-grid {
-        width: 280px !important;
-        min-width: 280px !important;
-        max-width: 280px !important;
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
     }
 
     .c-carousel-container .c-project-card-image-grid {
-        height: 200px !important;
+        height: 190px !important;
+        min-height: 190px !important;
+        max-height: 190px !important;
     }
 
     .c-carousel-btn {
@@ -3381,19 +3411,21 @@ html {
         font-size: 0.9em !important;
     }
 
-    /* Carousel - Small Mobile */
+    /* Carousel - Small Mobile (1 card visible) */
     .c-carousel-container {
         padding: var(--c-spacing-sm) 40px;
     }
 
     .c-carousel-container .c-project-card-grid {
-        width: 250px !important;
-        min-width: 250px !important;
-        max-width: 250px !important;
+        width: 240px !important;
+        min-width: 240px !important;
+        max-width: 240px !important;
     }
 
     .c-carousel-container .c-project-card-image-grid {
-        height: 180px !important;
+        height: 170px !important;
+        min-height: 170px !important;
+        max-height: 170px !important;
     }
 
     .c-carousel-btn {
