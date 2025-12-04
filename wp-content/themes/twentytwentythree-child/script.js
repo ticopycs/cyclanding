@@ -6,6 +6,62 @@
 (function($) {
     'use strict';
 
+    // ============================================
+    // LOADING SPINNER CONTROL
+    // ============================================
+    
+    // Hide spinner when page is fully loaded
+    window.addEventListener('load', function() {
+        const spinner = document.getElementById('cyc-loading-spinner');
+        if (spinner) {
+            setTimeout(function() {
+                spinner.classList.add('hidden');
+                // Remove from DOM after transition
+                setTimeout(function() {
+                    spinner.remove();
+                }, 500);
+            }, 300); // Small delay to ensure smooth transition
+        }
+    });
+
+    // Show spinner on page navigation (if using links)
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href]');
+        if (link && !link.hasAttribute('target') && !link.getAttribute('href').startsWith('#')) {
+            const spinner = document.getElementById('cyc-loading-spinner');
+            if (spinner && !spinner.classList.contains('hidden')) {
+                // Spinner already visible
+                return;
+            }
+            // Create new spinner for navigation
+            if (!document.getElementById('cyc-loading-spinner')) {
+                const newSpinner = createLoadingSpinner();
+                document.body.insertBefore(newSpinner, document.body.firstChild);
+            }
+        }
+    });
+
+    // Helper to create loading spinner dynamically
+    function createLoadingSpinner() {
+        const overlay = document.createElement('div');
+        overlay.id = 'cyc-loading-spinner';
+        overlay.className = 'c-loading-overlay';
+        overlay.innerHTML = `
+            <div class="c-spinner-container">
+                <div class="c-spinner-ring"></div>
+                <div class="c-spinner-logo-base"></div>
+                <div class="c-spinner-logo-orbit"></div>
+                <div class="c-spinner-particle"></div>
+                <div class="c-spinner-particle"></div>
+                <div class="c-spinner-particle"></div>
+                <div class="c-spinner-particle"></div>
+                <div class="c-spinner-particle"></div>
+                <div class="c-spinner-text">CARGANDO...</div>
+            </div>
+        `;
+        return overlay;
+    }
+
     // Wait for DOM to be ready
     $(document).ready(function() {
         // Header scroll behavior - integrate with hero, then sticky

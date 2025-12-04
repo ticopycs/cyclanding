@@ -26,7 +26,158 @@ Version: 1.0.0
     font-display: swap;
 }
 
-/* Minimalist Design System */
+/* ============================================
+   LOADING SPINNER - CyC Emprendimientos
+   ============================================ */
+
+/* Loading Overlay */
+.c-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(204, 204, 204, 0.95) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.c-loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Spinner Container */
+.c-spinner-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Base Logo (Black - Breathe effect with orange glow) */
+.c-spinner-logo-base {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-image: url('/imagenes/newlogonegro.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: breatheGlow 2.5s ease-in-out infinite;
+    z-index: 1;
+    filter: drop-shadow(0 0 0px rgba(255, 111, 39, 0));
+}
+
+@keyframes breatheGlow {
+    0%, 100% {
+        transform: scale(0.95);
+        filter: drop-shadow(0 0 8px rgba(255, 111, 39, 0.3));
+    }
+    50% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 25px rgba(255, 111, 39, 0.8)) drop-shadow(0 0 40px rgba(255, 111, 39, 0.5));
+    }
+}
+
+/* Hide Orbiting Logo */
+.c-spinner-logo-orbit {
+    display: none;
+}
+
+/* Circular Progress Ring */
+.c-spinner-ring {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border: 3px solid rgba(204, 204, 204, 0.3);
+    border-top-color: #FF6F27;
+    border-radius: 50%;
+    animation: spin 1.5s ease-in-out infinite;
+    z-index: 0;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+        border-top-color: #FF6F27;
+        border-right-color: rgba(204, 204, 204, 0.3);
+    }
+    50% {
+        border-top-color: rgba(255, 111, 39, 0.5);
+        border-right-color: #FF6F27;
+    }
+    100% {
+        transform: rotate(360deg);
+        border-top-color: #FF6F27;
+        border-right-color: rgba(204, 204, 204, 0.3);
+    }
+}
+
+/* Loading Text */
+.c-spinner-text {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9em;
+    color: #434955;
+    font-weight: 600;
+    letter-spacing: 2px;
+    animation: fadeInOut 2s ease-in-out infinite;
+    white-space: nowrap;
+    font-family: 'Shary', sans-serif;
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Particle Effects */
+.c-spinner-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: #FF6F27;
+    border-radius: 50%;
+    opacity: 0;
+    animation: particle 3s ease-out infinite;
+}
+
+.c-spinner-particle:nth-child(1) { animation-delay: 0s; --tx: 60px; --ty: -60px; }
+.c-spinner-particle:nth-child(2) { animation-delay: 0.6s; --tx: -60px; --ty: -60px; }
+.c-spinner-particle:nth-child(3) { animation-delay: 1.2s; --tx: 60px; --ty: 60px; }
+.c-spinner-particle:nth-child(4) { animation-delay: 1.8s; --tx: -60px; --ty: 60px; }
+.c-spinner-particle:nth-child(5) { animation-delay: 2.4s; --tx: 0px; --ty: -80px; }
+
+@keyframes particle {
+    0% {
+        transform: translate(0, 0) scale(0);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(1);
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   Minimalist Design System
+   ============================================ */
 
 /* 1. CSS Variables (Tokens) */
 :root {

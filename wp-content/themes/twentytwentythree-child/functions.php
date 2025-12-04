@@ -1140,3 +1140,26 @@ function cyc_child_hide_default_header() {
     <?php
 }
 add_action('wp_head', 'cyc_child_hide_default_header', 999);
+
+/**
+ * Inject loading spinner on all pages
+ */
+function cyc_child_inject_loading_spinner() {
+    ?>
+    <!-- CyC Loading Spinner -->
+    <div class="c-loading-overlay" id="cyc-loading-spinner">
+        <div class="c-spinner-container">
+            <div class="c-spinner-ring"></div>
+            <div class="c-spinner-logo-base"></div>
+            <div class="c-spinner-logo-orbit"></div>
+            <div class="c-spinner-particle"></div>
+            <div class="c-spinner-particle"></div>
+            <div class="c-spinner-particle"></div>
+            <div class="c-spinner-particle"></div>
+            <div class="c-spinner-particle"></div>
+            <div class="c-spinner-text">CARGANDO...</div>
+        </div>
+    </div>
+    <?php
+}
+add_action('wp_body_open', 'cyc_child_inject_loading_spinner', 0);
