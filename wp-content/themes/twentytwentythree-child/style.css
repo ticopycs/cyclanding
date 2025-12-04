@@ -492,6 +492,10 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     background-color: var(--c-background-light);
 }
 
+.c-section.bg-gray {
+    background-color: #CCCCCC;
+}
+
 .c-section.bg-dark {
     background-color: var(--c-background-dark);
 }
@@ -727,12 +731,38 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-projects-page {
     padding-top: 0 !important;
     margin-top: 0 !important;
-    padding: 0 !important;
+    padding: var(--c-spacing-xl) 0 !important;
+    background: 
+        linear-gradient(135deg, rgba(255, 111, 39, 0.03) 0%, rgba(67, 73, 85, 0.03) 100%),
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 35px,
+            rgba(255, 111, 39, 0.02) 35px,
+            rgba(255, 111, 39, 0.02) 70px
+        );
+    position: relative;
+}
+
+.c-projects-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 111, 39, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(67, 73, 85, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .c-projects-page .container {
     padding-top: 0 !important;
     margin-top: 0 !important;
+    position: relative;
+    z-index: 1;
 }
 
 /* Remove extra spacing from WordPress containers on proyectos page */
