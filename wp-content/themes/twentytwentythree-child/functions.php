@@ -97,6 +97,30 @@ add_filter('script_loader_src', 'twentytwentythree_child_remove_wp_version');
 add_filter('style_loader_src', 'twentytwentythree_child_remove_wp_version');
 
 /**
+ * Prevent Divi-related plugins from loading CSS/JS that doesn't exist
+ * Fixes 404 errors for magnific_popup.css and other Divi assets
+ */
+function twentytwentythree_child_prevent_divi_assets() {
+    // Dequeue magnific-popup CSS from Supreme Modules for Divi plugin
+    wp_dequeue_style('magnific-popup');
+    wp_deregister_style('magnific-popup');
+}
+add_action('wp_enqueue_scripts', 'twentytwentythree_child_prevent_divi_assets', 999);
+
+/**
+ * Remove any Divi-related style enqueues that reference non-existent files
+ */
+function twentytwentythree_child_filter_divi_styles($src, $handle) {
+    // Block magnific_popup.css and other Divi builder assets
+    if (strpos($src, 'magnific_popup.css') !== false || 
+        strpos($src, 'dynamic-assets/assets/css') !== false) {
+        return false; // Prevent loading
+    }
+    return $src;
+}
+add_filter('style_loader_src', 'twentytwentythree_child_filter_divi_styles', 10, 2);
+
+/**
  * Hide WordPress branding in admin footer
  */
 add_filter('admin_footer_text', '__return_empty_string', 11);
@@ -471,12 +495,19 @@ function cyc_child_get_projects_data(): array {
             'availability' => 'disponible',
             'availability_label' => 'Unidades disponibles',
             'badge_class' => 'c-badge-available',
-            'primary_image' => home_url('/imagenes/libera/liberaPic.jpg'),
+            'primary_image' => home_url('/imagenes/libera/Frente calle Leguizamón.png'),
             'hero_images' => [
-                home_url('/imagenes/libera/liberaPic.jpg'),
+                home_url('/imagenes/libera/Frente calle Leguizamón.png'),
+                home_url('/imagenes/libera/Frente calle Cnel Suarez.png'),
+                home_url('/imagenes/libera/Axonométrica calle Leguizamón.png'),
             ],
             'gallery' => [
-                home_url('/imagenes/libera/liberaPic.jpg'),
+                ['type' => 'image', 'url' => home_url('/imagenes/libera/Frente calle Leguizamón.png'), 'thumbnail' => home_url('/imagenes/libera/Frente calle Leguizamón.png')],
+                ['type' => 'image', 'url' => home_url('/imagenes/libera/Frente calle Cnel Suarez.png'), 'thumbnail' => home_url('/imagenes/libera/Frente calle Cnel Suarez.png')],
+                ['type' => 'image', 'url' => home_url('/imagenes/libera/Axonométrica calle Leguizamón.png'), 'thumbnail' => home_url('/imagenes/libera/Axonométrica calle Leguizamón.png')],
+                ['type' => 'image', 'url' => home_url('/imagenes/libera/Axonometrica esquina_1.png'), 'thumbnail' => home_url('/imagenes/libera/Axonometrica esquina_1.png')],
+                ['type' => 'image', 'url' => home_url('/imagenes/libera/Axonometrica esquina transparente.png'), 'thumbnail' => home_url('/imagenes/libera/Axonometrica esquina transparente.png')],
+                ['type' => 'image', 'url' => home_url('/imagenes/libera/Enscape_2024-12-30-19-11-24_Enscape escena 4.png'), 'thumbnail' => home_url('/imagenes/libera/Enscape_2024-12-30-19-11-24_Enscape escena 4.png')],
             ],
             'characteristics' => [
                 'Ubicación estratégica',
@@ -1013,19 +1044,6 @@ add_action('wp_enqueue_scripts', function() {
  * the content should be copied directly into WordPress pages.
  */
 function cyc_child_load_homepage_from_file($content) {
-    // Solo activar en desarrollo local (verificar si estamos en localhost o Docker)
-    $is_local = (
-        isset($_SERVER['HTTP_HOST']) && 
-        (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || 
-         strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false ||
-         strpos($_SERVER['HTTP_HOST'], '.local') !== false)
-    );
-    
-    // Si no es local, usar siempre el contenido de WordPress
-    if (!$is_local) {
-        return $content;
-    }
-    
     // Only on homepage/front page
     if (!is_front_page() && !is_home()) {
         return $content;
@@ -1033,7 +1051,7 @@ function cyc_child_load_homepage_from_file($content) {
     
     $html_file = get_stylesheet_directory() . '/homepage_content.html';
     
-    // Check if file exists
+    // Check if file exists - si existe, usarlo siempre (local, staging, producción)
     if (!file_exists($html_file)) {
         return $content;
     }
