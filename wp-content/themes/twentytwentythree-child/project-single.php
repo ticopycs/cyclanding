@@ -72,14 +72,17 @@ add_filter('body_class', function($classes) {
                 <img src="/imagenes/newlogonegro.png" 
                      alt="<?php bloginfo('name'); ?>" 
                      class="cyc-logo-img">
-                <span class="cyc-logo-slogan">CyC Emprendimientos</span>
             </a>
         </div>
 
-        <!-- CTA Button (Column 2 - Center) -->
-        <a href="/proyectos" class="cyc-cta-button">
-            PROYECTOS
-        </a>
+        <!-- Navigation Menu (Column 2 - Center) -->
+        <nav class="cyc-header-nav">
+            <a href="/#nosotros" class="cyc-nav-link">Nosotros</a>
+            <a href="/#servicios" class="cyc-nav-link">Servicios</a>
+            <a href="/proyectos" class="cyc-nav-link">Proyectos</a>
+            <a href="/#equipo" class="cyc-nav-link">Equipo</a>
+            <a href="/#ubicacion" class="cyc-nav-link">Contacto</a>
+        </nav>
 
         <!-- Social Media Icons (Column 3 - Right) -->
         <div class="cyc-social-icons">
@@ -114,7 +117,11 @@ add_filter('body_class', function($classes) {
     <!-- Mobile Menu Overlay -->
     <div class="cyc-mobile-menu" id="cyc-mobile-menu">
         <nav class="cyc-mobile-nav">
-            <a href="/proyectos" class="cyc-mobile-cta">PROYECTOS</a>
+            <a href="/#nosotros" class="cyc-mobile-nav-link">Nosotros</a>
+            <a href="/#servicios" class="cyc-mobile-nav-link">Servicios</a>
+            <a href="/proyectos" class="cyc-mobile-nav-link">Proyectos</a>
+            <a href="/#equipo" class="cyc-mobile-nav-link">Equipo</a>
+            <a href="/#ubicacion" class="cyc-mobile-nav-link">Contacto</a>
             <div class="cyc-mobile-social">
                 <a href="https://wa.me/5493875058555" 
                    target="_blank" 
