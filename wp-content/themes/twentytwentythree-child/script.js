@@ -264,8 +264,8 @@
                 zoomControl: true
             });
 
-            // Add Dark theme tiles (CartoDB Dark Matter)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            // Add Light theme tiles for better visibility
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 subdomains: 'abcd',
                 maxZoom: 20
@@ -478,14 +478,149 @@
         // Initialize map when ready
         initMap();
 
+        // Header scroll detection - cambiar fondo cuando se sale del hero
+        const header = document.querySelector('.cyc-header');
+        const heroSection = document.querySelector('.c-hero');
+        
+        function handleHeaderScroll() {
+            if (!header) return;
+            
+            const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (heroSection) {
+                const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+                
+                // Si estamos sobre el hero, header transparente
+                if (scrollPosition < heroBottom - 100) {
+                    header.classList.add('over-hero');
+                    header.classList.remove('scrolled');
+                } else {
+                    // Después del hero, header con fondo
+                    header.classList.remove('over-hero');
+                    header.classList.add('scrolled');
+                }
+            } else {
+                // Si no hay hero section, siempre mostrar fondo blanco (página de proyectos, etc.)
+                header.classList.remove('over-hero');
+                header.classList.add('scrolled');
+            }
+        }
+        
+        // Detectar sección activa para navegación
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll('[id^="nosotros"], [id^="servicios"], [id^="proyectos"], [id^="equipo"], [id^="ubicacion"]');
+            const navLinks = document.querySelectorAll('.cyc-nav-link, .cyc-mobile-nav-link');
+            
+            let currentSection = '';
+            const scrollPosition = window.pageYOffset + 150;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Función para inicializar el estado del header
+        function initHeaderState() {
+            if (!header) return;
+            
+            // Verificar si hay hero section
+            if (heroSection) {
+                // Si hay hero, empezar transparente (over-hero)
+                header.classList.add('over-hero');
+                header.classList.remove('scrolled');
+            } else {
+                // Si no hay hero (página de proyectos, etc.), empezar con fondo blanco
+                header.classList.remove('over-hero');
+                header.classList.add('scrolled');
+            }
+            // Ejecutar función para asegurar estado correcto
+            handleHeaderScroll();
+        }
+        
+        // Inicializar inmediatamente si DOM está listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initHeaderState);
+        } else {
+            // DOM ya está listo, ejecutar inmediatamente
+            initHeaderState();
+        }
+        
+        // También con jQuery por compatibilidad
+        $(document).ready(initHeaderState);
+        
+        window.addEventListener('scroll', () => {
+            handleHeaderScroll();
+            updateActiveNavLink();
+        }, { passive: true });
+        
+        // Servicios interactivos - Click para scroll a proyectos
+        document.querySelectorAll('.c-service-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const proyectosSection = document.querySelector('#proyectos');
+                if (proyectosSection) {
+                    const headerHeight = header ? header.offsetHeight : 80;
+                    const targetPosition = proyectosSection.offsetTop - headerHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Función para agregar horarios al calendario
+        window.addToCalendar = function() {
+            const startDate = new Date();
+            startDate.setHours(9, 0, 0, 0);
+            const endDate = new Date();
+            endDate.setHours(18, 0, 0, 0);
+            
+            // Formato para Google Calendar
+            const formatDate = (date) => {
+                return date.toISOString().replace(/-|:|\.\d+/g, '');
+            };
+            
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Horarios+CyC+Emprendimientos&dates=${formatDate(startDate)}/${formatDate(endDate)}&details=Lunes+a+Viernes:+9:00+–+18:00&location=Vicente+Lopez+477+3D,+Salta,+Argentina`;
+            
+            window.open(googleCalendarUrl, '_blank');
+        };
+        
         // Smooth scroll for on-page anchors
         $('a[href^="#"]').on('click', function(e) {
-            var target = $(this.getAttribute('href'));
+            const href = $(this).attr('href');
+            if (href === '#' || href === '#!') return;
+            
+            const target = $(href);
             if (target.length) {
                 e.preventDefault();
+                const headerHeight = header ? header.offsetHeight : 80;
                 $('html, body').stop().animate({
-                    scrollTop: target.offset().top - 80
-                }, 1000, 'swing');
+                    scrollTop: target.offset().top - headerHeight
+                }, 800, 'swing');
+                
+                // Cerrar menú móvil si está abierto
+                const mobileMenu = document.querySelector('.cyc-mobile-menu');
+                const hamburger = document.querySelector('.cyc-hamburger');
+                if (mobileMenu && mobileMenu.classList.contains('is-open')) {
+                    mobileMenu.classList.remove('is-open');
+                    if (hamburger) {
+                        hamburger.classList.remove('is-active');
+                        hamburger.setAttribute('aria-expanded', 'false');
+                    }
+                    document.body.style.overflow = '';
+                }
             }
         });
 
@@ -633,7 +768,7 @@
     
     // Estrategia 2: Si no encontramos con children, buscar con querySelectorAll
     if (cards.length === 0) {
-        const allCards = Array.from(track.querySelectorAll('.c-project-card-grid'));
+        const allCards = Array.from(track.querySelectorAll('.c-project-card-grid, .c-project-card-minimal'));
         // Filtrar duplicados y asegurar que sean hijos directos o elementos válidos
         const seen = new Set();
         cards = allCards.filter(card => {
@@ -658,7 +793,7 @@
     if (cards.length === 0) {
         const allLinks = track.querySelectorAll('a[data-project]');
         cards = Array.from(allLinks).filter(link => {
-            return link.classList && link.classList.contains('c-project-card-grid');
+            return link.classList && (link.classList.contains('c-project-card-grid') || link.classList.contains('c-project-card-minimal'));
         });
     }
     
@@ -692,7 +827,7 @@
         
         // Intentar una última vez después de un delay
         setTimeout(() => {
-            const retryCards = Array.from(track.querySelectorAll('a.c-project-card-grid, .c-project-card-grid[data-project]'));
+            const retryCards = Array.from(track.querySelectorAll('a.c-project-card-grid, a.c-project-card-minimal, .c-project-card-grid[data-project], .c-project-card-minimal[data-project]'));
             if (retryCards.length > 0) {
                 console.log('CyC Carousel: Reintentando inicialización después de delay...');
                 // Reinicializar con las tarjetas encontradas
@@ -909,6 +1044,137 @@
         }, AUTO_PLAY_SPEED);
     });
 
+    // ============================================
+    // SWIPE/TOUCH SUPPORT FOR MOBILE
+    // ============================================
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchCurrentX = 0;
+    let isDragging = false;
+    let startOffset = 0;
+    let touchStartTime = 0;
+    let hasSwiped = false; // Para prevenir clicks en links después de un swipe
+    const SWIPE_THRESHOLD = 50; // Mínimo de píxeles para considerar un swipe
+    const SWIPE_MIN_DISTANCE = 30; // Distancia mínima para swipe rápido
+
+    // Obtener el offset actual del track
+    function getCurrentOffset() {
+        const transform = track.style.transform || 'translateX(0px)';
+        const match = transform.match(/translateX\((-?\d+\.?\d*)px\)/);
+        return match ? parseFloat(match[1]) : 0;
+    }
+
+    // Touch start
+    track.addEventListener('touchstart', (e) => {
+        // Pausar auto-play mientras se interactúa
+        isPaused = true;
+        stopAutoPlay();
+        
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchStartTime = Date.now();
+        startOffset = getCurrentOffset();
+        isDragging = true;
+        hasSwiped = false; // Resetear flag de swipe
+        
+        // Prevenir scroll mientras se arrastra
+        track.style.transition = 'none';
+    }, { passive: true });
+
+    // Touch move
+    track.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        
+        const touch = e.touches[0];
+        touchCurrentX = touch.clientX;
+        const deltaX = touchCurrentX - touchStartX;
+        const deltaY = Math.abs(touch.clientY - touchStartY);
+        
+        // Solo permitir swipe horizontal si el movimiento horizontal es mayor que el vertical
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+            e.preventDefault(); // Prevenir scroll vertical
+            const newOffset = startOffset + deltaX;
+            track.style.transform = `translateX(${newOffset}px)`;
+        }
+    }, { passive: false });
+
+    // Touch end
+    track.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        const touchEndTime = Date.now();
+        const touchDuration = touchEndTime - touchStartTime;
+        const deltaX = touchCurrentX - touchStartX;
+        const deltaY = Math.abs(touchStartY - (e.changedTouches[0]?.clientY || touchStartY));
+        const distance = Math.abs(deltaX);
+        
+        // Calcular velocidad (píxeles por milisegundo)
+        const velocity = distance / touchDuration;
+        
+        // Determinar si fue un swipe válido
+        // 1. Swipe con distancia suficiente
+        const hasMinimumDistance = distance > SWIPE_THRESHOLD;
+        // 2. Swipe rápido con menos distancia
+        const isFastSwipe = velocity > 0.3 && distance > SWIPE_MIN_DISTANCE;
+        // 3. El movimiento horizontal debe ser mayor que el vertical
+        const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+        
+        if ((hasMinimumDistance || isFastSwipe) && isHorizontalSwipe) {
+            hasSwiped = true; // Marcar que hubo un swipe
+            // Swipe a la izquierda (siguiente)
+            if (deltaX < 0) {
+                goNext();
+            }
+            // Swipe a la derecha (anterior)
+            else {
+                goPrev();
+            }
+        } else {
+            // No fue un swipe válido, volver a la posición actual
+            applyTransform(false);
+        }
+        
+        // Restaurar transición
+        track.style.transition = 'transform 0.4s ease';
+        
+        // Prevenir clicks en links si hubo un swipe
+        if (hasSwiped) {
+            const links = track.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, { once: true, capture: true });
+            });
+            
+            // Resetear el flag después de un momento
+            setTimeout(() => {
+                hasSwiped = false;
+            }, 300);
+        }
+        
+        // Reanudar auto-play después de un momento
+        setTimeout(() => {
+            isPaused = false;
+            startAutoPlay();
+        }, AUTO_PLAY_SPEED);
+    }, { passive: true });
+
+    // Cancelar drag si el usuario sale del área
+    track.addEventListener('touchcancel', () => {
+        if (isDragging) {
+            isDragging = false;
+            applyTransform(false);
+            track.style.transition = 'transform 0.4s ease';
+            setTimeout(() => {
+                isPaused = false;
+                startAutoPlay();
+            }, AUTO_PLAY_SPEED);
+        }
+    }, { passive: true });
+
     // Recalcular en resize
     function recalc() {
         const newWrapperWidth = wrapper ? wrapper.clientWidth : container.clientWidth;
@@ -988,7 +1254,7 @@
         
         // Verificar que tengamos tarjetas válidas
         const currentCards = Array.from(track.children).filter(card => {
-            return card.classList && card.classList.contains('c-project-card-grid');
+            return card.classList && (card.classList.contains('c-project-card-grid') || card.classList.contains('c-project-card-minimal'));
         });
         
         if (currentCards.length === 0) {

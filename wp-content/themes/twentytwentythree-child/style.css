@@ -198,10 +198,10 @@ Version: 1.0.0
     --c-spacing-lg: 32px;
     --c-spacing-xl: 64px;
 
-    /* Tipografía Montserrat */
-    --c-font-family-primary: 'Montserrat', sans-serif;
-    --c-font-family-title: 'Montserrat', sans-serif;
-    --c-font-family-text: 'Montserrat', sans-serif;
+    /* Tipografía Shary */
+    --c-font-family-primary: 'Shary', sans-serif;
+    --c-font-family-title: 'Shary Bold', sans-serif;
+    --c-font-family-text: 'Shary', sans-serif;
     --c-font-weight-light: 300;
     --c-font-weight-regular: 400;
     --c-font-weight-medium: 500;
@@ -235,6 +235,20 @@ Version: 1.0.0
 }
 
 /* 2. Base Styles Override */
+/* Prevent horizontal overflow - Global rules */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
 body {
     font-family: var(--c-font-family-text) !important;
     font-weight: var(--c-font-weight-regular) !important;
@@ -242,6 +256,25 @@ body {
     color: var(--c-text-dark);
     line-height: 1.6;
     background-color: var(--c-white);
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+}
+
+/* Ensure main content doesn't overflow */
+main,
+article,
+.wp-site-blocks,
+.wp-block-group {
+    max-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    box-sizing: border-box;
 }
 
 /* Remove any spacing from page content containers */
@@ -271,13 +304,17 @@ h6 {
 }
 
 h1 {
-    font-size: 2.8em;
-    font-weight: var(--c-font-weight-black);
+    font-size: 3.5em;
+    font-weight: normal; /* Shary Bold ya es bold */
+    letter-spacing: -0.02em;
+    line-height: 1.1;
 }
 
 h2 {
-    font-size: 2.2em;
-    font-weight: var(--c-font-weight-extrabold);
+    font-size: 2.8em;
+    font-weight: normal; /* Shary Bold ya es bold */
+    letter-spacing: -0.01em;
+    line-height: 1.2;
 }
 
 h3 {
@@ -352,8 +389,10 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 /* 3. Layout & Utility Classes */
 .container {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     padding: 0 var(--c-spacing-md);
+    box-sizing: border-box;
 }
 
 .text-center {
@@ -454,6 +493,9 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     opacity: 1;
     margin: 0;
     padding: 0;
+    max-width: 100%;
+    word-wrap: break-word;
+    box-sizing: border-box;
 }
 
 .c-hero h1 {
@@ -486,8 +528,11 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     gap: var(--c-spacing-lg);
     margin-top: var(--c-spacing-lg);
     max-width: 1000px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
+    padding: 0 var(--c-spacing-md);
+    box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
@@ -506,6 +551,38 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     position: relative;
     overflow: hidden;
     animation: fadeInUp 0.6s ease-out backwards;
+    cursor: pointer;
+}
+
+/* Imagen de hover para servicios */
+.c-service-image-hover {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.c-service-image-hover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+
+.c-service-card:hover .c-service-image-hover {
+    opacity: 1;
+}
+
+.c-service-card:hover .c-service-icon,
+.c-service-card:hover h3,
+.c-service-card:hover p {
+    position: relative;
+    z-index: 2;
+    color: var(--c-white);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .c-service-card:nth-child(1) {
@@ -631,6 +708,10 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
 .c-section {
     padding: var(--c-spacing-md) 0;
     background-color: var(--c-white);
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 /* Projects Page - Remove all spacing */
@@ -668,6 +749,7 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     max-width: calc(100% - 120px);
     overflow: hidden;
     margin: 0 auto;
+    touch-action: pan-y; /* Permitir scroll vertical normal, pero manejar horizontal con JS */
 }
 
 .c-carousel-track {
@@ -675,10 +757,97 @@ body.single-cyc-project header[role="banner"]:not(.wp-block-template-part) {
     gap: 24px;
     width: fit-content;
     will-change: transform;
+    touch-action: pan-y pinch-zoom; /* Permitir swipe horizontal, prevenir scroll vertical durante drag */
+    cursor: grab;
+}
+
+.c-carousel-track:active {
+    cursor: grabbing;
 }
 
 .c-carousel-track:hover {
     animation-play-state: paused;
+}
+
+/* Proyectos Minimalistas - Solo imagen + título */
+.c-project-card-minimal {
+    position: relative;
+    width: 350px !important;
+    min-width: 350px !important;
+    max-width: 350px !important;
+    flex-shrink: 0 !important;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 8px;
+    text-decoration: none;
+    display: block;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Responsive para proyectos minimalistas */
+@media (max-width: 768px) {
+    .c-project-card-minimal {
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+    }
+    
+    .c-project-overlay {
+        padding: 1.5em 1em 1em;
+    }
+    
+    .c-project-overlay h3 {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .c-project-card-minimal {
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+    }
+}
+
+.c-project-card-minimal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.c-project-card-minimal:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.c-project-card-minimal:hover img {
+    transform: scale(1.1);
+}
+
+.c-project-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4), transparent);
+    padding: 2em 1.5em 1.5em;
+    color: var(--c-white);
+    transition: padding 0.3s ease;
+}
+
+.c-project-overlay h3 {
+    color: var(--c-white) !important;
+    font-size: 1.5em;
+    margin: 0;
+    font-weight: normal;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.c-project-card-minimal:hover .c-project-overlay {
+    padding-bottom: 2em;
 }
 
 /* Carousel uses same cards as grid page - Optimized for 4 cards display */
@@ -1713,16 +1882,20 @@ article > .c-projects-page:first-child {
 
 /* Statistics Section - Two Column Layout */
 .c-stats-container {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: var(--c-spacing-lg);
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--c-spacing-xl);
     padding: var(--c-spacing-md) 0;
+    max-width: 100%;
+    width: 100%;
 }
 
 .c-stats-description {
     padding: var(--c-spacing-md);
-    animation: fadeInLeft 0.8s ease-out;
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .c-stats-description h3 {
@@ -1757,7 +1930,10 @@ article > .c-projects-page:first-child {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--c-spacing-lg);
     text-align: center;
-    animation: fadeInRight 0.8s ease-out;
+    animation: fadeIn 0.8s ease-out;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 /* Team Section */
@@ -1766,6 +1942,28 @@ article > .c-projects-page:first-child {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--c-spacing-xl);
     padding: var(--c-spacing-xl) 0;
+}
+
+.c-team-photo-rectangular {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    margin-bottom: 1em;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.c-team-photo-rectangular img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.c-team-member:hover .c-team-photo-rectangular {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .c-team-card {
@@ -1840,10 +2038,12 @@ article > .c-projects-page:first-child {
     gap: var(--c-spacing-lg);
     margin-top: var(--c-spacing-xl);
     max-width: 1200px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-bottom: var(--c-spacing-lg);
+    padding: 0 var(--c-spacing-md) var(--c-spacing-lg);
     align-items: stretch;
+    box-sizing: border-box;
 }
 
 .c-location-card {
@@ -1991,12 +2191,18 @@ article > .c-projects-page:first-child {
 @media (max-width: 640px) {
     .c-location-info {
         gap: var(--c-spacing-md);
+        padding: 0 var(--c-spacing-sm);
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .c-location-card {
         flex: 1 1 100%;
         min-width: 100%;
+        max-width: 100%;
         min-height: 220px;
+        box-sizing: border-box;
     }
 
     .c-location-card-icon {
@@ -3323,13 +3529,64 @@ article > .c-projects-page:first-child {
     }
 }
 
-/* Footer */
+/* Footer Minimalista */
+.c-footer-minimal {
+    background: #f8f8f8;
+    padding: 2.5em 0;
+    border-top: 1px solid #e0e0e0;
+    margin-top: var(--c-spacing-xl);
+}
+
+.c-footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--c-spacing-md);
+    text-align: center;
+}
+
+.c-footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    margin-bottom: 1.5em;
+    flex-wrap: wrap;
+}
+
+.c-footer-link {
+    color: #434955;
+    text-decoration: none;
+    font-family: var(--c-font-family-primary);
+    font-size: 0.9em;
+    font-weight: var(--c-font-weight-medium);
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+    padding: 0.5em 0;
+}
+
+.c-footer-link:hover {
+    color: #FF6F27;
+}
+
+.c-footer-copyright {
+    color: #666;
+    font-size: 0.85em;
+    margin: 0;
+    font-family: var(--c-font-family-primary);
+}
+
+/* Footer Legacy (mantener por compatibilidad) */
 .c-footer {
     background-color: var(--c-primary);
     color: var(--c-white);
     text-align: center;
     padding: var(--c-spacing-lg) 0;
     font-size: 0.9em;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 .c-footer p {
@@ -3903,12 +4160,12 @@ html {
 
     /* Typography - Mobile */
     h1 {
-        font-size: 2em !important;
+        font-size: 2.5em !important;
         line-height: 1.2;
     }
 
     h2 {
-        font-size: 1.6em !important;
+        font-size: 2em !important;
         line-height: 1.3;
     }
 
@@ -3932,6 +4189,21 @@ html {
         height: 70vh;
         min-height: 500px;
         padding: var(--c-spacing-md);
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .c-hero-bottom-text {
+        max-width: 90%;
+        padding: 0 var(--c-spacing-md);
+        box-sizing: border-box;
+    }
+
+    .c-hero-bottom-text p {
+        font-size: 1.5em !important;
+        word-wrap: break-word;
     }
 
     .c-hero-content {
@@ -3954,26 +4226,49 @@ html {
     /* Sections - Mobile */
     .c-section {
         padding: var(--c-spacing-lg) var(--c-spacing-sm);
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     .c-section>.container {
         padding: 0 var(--c-spacing-sm);
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     /* Services Grid - Mobile */
     .c-services-grid {
         grid-template-columns: 1fr !important;
         gap: var(--c-spacing-md);
+        padding: 0 var(--c-spacing-sm);
+        max-width: 100%;
+        width: 100%;
     }
 
     .c-service-card {
         padding: var(--c-spacing-md);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     /* Carousel - Mobile (2 cards visible) */
     .c-carousel-container {
         padding: var(--c-spacing-md) 50px;
         margin: var(--c-spacing-md) auto;
+        max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .c-carousel-wrapper {
+        max-width: calc(100% - 100px);
+        width: 100%;
+        overflow-x: hidden;
     }
 
     .c-carousel-container .c-project-card-grid {
@@ -4018,18 +4313,20 @@ html {
     /* Stats Grid - Mobile */
     .c-stats-container {
         flex-direction: column;
-        gap: var(--c-spacing-lg);
+        gap: var(--c-spacing-xl);
     }
 
     .c-stats-description {
-        order: 2;
         text-align: center;
+        padding: 0 var(--c-spacing-sm);
     }
 
     .c-stats-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: var(--c-spacing-md);
-        order: 1;
+        max-width: 100%;
+        width: 100%;
+        padding: 0 var(--c-spacing-sm);
     }
 
     .c-stat-item {
@@ -4152,14 +4449,22 @@ html {
 
 /* Small mobile devices (max-width: 480px) */
 @media (max-width: 480px) {
+    .cyc-footer-links {
+        gap: 1em;
+        flex-direction: column;
+    }
+    
+    .cyc-footer-link {
+        font-size: 0.85em;
+    }
 
     /* Typography - Small Mobile */
     h1 {
-        font-size: 1.75em !important;
+        font-size: 2em !important;
     }
 
     h2 {
-        font-size: 1.4em !important;
+        font-size: 1.6em !important;
     }
 
     h3 {
@@ -4183,6 +4488,15 @@ html {
     /* Carousel - Small Mobile (1 card visible) */
     .c-carousel-container {
         padding: var(--c-spacing-sm) 40px;
+        max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .c-carousel-wrapper {
+        max-width: calc(100% - 80px);
+        width: 100%;
     }
 
     .c-carousel-container .c-project-card-grid {
@@ -4204,8 +4518,25 @@ html {
     }
 
     /* Stats Grid - Small Mobile */
+    /* Keep 2x2 grid even on small mobile, but with reduced spacing */
     .c-stats-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--c-spacing-sm);
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .c-stat-item {
+        padding: var(--c-spacing-sm);
+    }
+
+    .c-stat-number {
+        font-size: 1.5em;
+    }
+
+    .c-stat-label {
+        font-size: 0.75em;
+        line-height: 1.3;
     }
 
     /* Map - Small Mobile */
@@ -4262,11 +4593,21 @@ html {
 .wp-site-blocks {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 body.page:not(.home) .wp-site-blocks,
 body.single-cyc-project .wp-site-blocks {
-    padding-top: 80px !important;
+    padding-top: 90px !important;
+}
+
+main.wp-block-group {
+    margin-top: 0 !important;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -4275,10 +4616,6 @@ body.single-cyc-project .wp-site-blocks {
     body.single-cyc-project .wp-site-blocks {
         padding-top: 80px !important;
     }
-}
-
-main.wp-block-group {
-    margin-top: 0 !important;
 }
 
 /* Force full-width content */
@@ -4322,27 +4659,70 @@ main.wp-block-group {
    CUSTOM CYC HEADER STYLES
    ============================================ */
 
-/* Header Container */
+/* Header Container - Minimalista con Transparencia */
 .cyc-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    background-color: #FF6F27;
+    max-width: 100%;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     transition: all 0.3s ease;
+    overflow-x: hidden;
+}
+
+/* Estado inicial: si hay hero, header transparente por defecto */
+.cyc-header:not(.scrolled):not(.over-hero) {
+    background: transparent;
+}
+
+/* Header transparente cuando está sobre hero */
+.cyc-header.over-hero {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+}
+
+/* Header con fondo sólido después del hero */
+.cyc-header.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* En páginas sin hero (como proyectos), header debe tener fondo blanco por defecto */
+body.page:not(.home) .cyc-header:not(.over-hero),
+body.single-cyc-project .cyc-header:not(.over-hero),
+body.archive .cyc-header:not(.over-hero) {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.page:not(.home) .cyc-header:not(.over-hero) .cyc-nav-link,
+body.single-cyc-project .cyc-header:not(.over-hero) .cyc-nav-link,
+body.archive .cyc-header:not(.over-hero) .cyc-nav-link {
+    color: #434955 !important;
 }
 
 .cyc-header-container {
     max-width: 1400px;
+    width: 100%;
     margin: 0 auto;
-    padding: 16px 32px;
+    padding: 10px 32px;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 32px;
+    box-sizing: border-box;
 }
 
 /* Logo Section */
@@ -4365,66 +4745,111 @@ main.wp-block-group {
 }
 
 .cyc-logo-img {
-    height: 50px;
+    height: 70px;
     width: auto;
     object-fit: contain;
 }
 
+/* Ocultar slogan - ya no se usa */
 .cyc-logo-slogan {
-    font-family: var(--c-font-family-primary);
-    font-size: 20px;
-    font-weight: var(--c-font-weight-bold);
-    color: #434955;
-    white-space: nowrap;
+    display: none;
 }
 
-/* Navigation Section */
+/* Navigation Section - Visible en desktop por defecto */
 .cyc-header-nav {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 24px;
-}
-
-/* CTA Button - Centered */
-.cyc-cta-button {
-    display: inline-flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
-    padding: 12px 32px;
-    background-color: transparent;
-    border: 2px solid #434955;
-    color: #434955;
-    font-family: var(--c-font-family-primary);
-    font-size: 16px;
-    font-weight: var(--c-font-weight-bold);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    gap: 32px;
+    flex-wrap: wrap;
     grid-column: 2;
 }
 
-.cyc-cta-button:hover {
-    background-color: #434955;
-    color: #FF6F27;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(67, 73, 85, 0.3);
-}
-
-.cyc-cta-button:active {
-    transform: translateY(0);
-}
-
-/* Social Icons */
+/* Social Icons - Visible en desktop por defecto */
 .cyc-social-icons {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
+    grid-column: 3;
+}
+
+/* Hamburger - Oculto en desktop por defecto */
+.cyc-hamburger {
+    display: none !important;
+}
+
+.cyc-nav-link {
+    font-family: var(--c-font-family-primary);
+    font-size: 16px;
+    font-weight: var(--c-font-weight-semibold);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    display: block;
+    /* Color por defecto - gris (visible sobre fondo blanco) */
+    color: #434955 !important;
+}
+
+/* Enlaces blancos cuando header está sobre hero (transparente) */
+.cyc-header.over-hero .cyc-nav-link {
+    color: #ffffff !important;
+}
+
+/* Color gris cuando header tiene fondo blanco (scrolled o sin hero) */
+.cyc-header.scrolled .cyc-nav-link {
+    color: #434955 !important;
+}
+
+.cyc-header.over-hero .cyc-nav-link::after {
+    background-color: #ffffff;
+}
+
+.cyc-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #FF6F27;
+    transition: width 0.3s ease;
+}
+
+.cyc-nav-link:hover,
+.cyc-nav-link.active {
+    color: #FF6F27 !important;
+}
+
+.cyc-nav-link:hover::after,
+.cyc-nav-link.active::after {
+    width: 100%;
+}
+
+/* Mobile Navigation Links */
+.cyc-mobile-nav-link {
+    display: block;
+    padding: 16px 24px;
+    color: #434955 !important;
+    font-family: var(--c-font-family-primary);
+    font-size: 18px;
+    font-weight: var(--c-font-weight-semibold);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    border-bottom: 1px solid rgba(67, 73, 85, 0.1);
+    transition: all 0.3s ease;
+}
+
+.cyc-mobile-nav-link:hover,
+.cyc-mobile-nav-link:active {
+    background-color: rgba(67, 73, 85, 0.05);
+    color: #FF6F27 !important;
 }
 
 .cyc-social-link {
@@ -4446,12 +4871,23 @@ main.wp-block-group {
     transform: scale(1.1);
 }
 
+/* Iconos sociales blancos cuando header está sobre hero */
+.cyc-header.over-hero .cyc-social-link {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.cyc-header.over-hero .cyc-social-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
 .cyc-social-icon {
     width: 22px;
     height: 22px;
 }
 
-/* Hamburger Menu Button (Mobile) */
+/* Hamburger Menu Button (Mobile) - Solo visible en móviles */
 .cyc-hamburger {
     display: none;
     flex-direction: column;
@@ -4466,6 +4902,11 @@ main.wp-block-group {
     transition: transform 0.3s ease;
     grid-column: 3;
     justify-self: end;
+}
+
+/* Hamburger blanco cuando header está sobre hero */
+.cyc-header.over-hero .cyc-hamburger-line {
+    background-color: #ffffff;
 }
 
 .cyc-hamburger:hover {
@@ -4499,12 +4940,15 @@ main.wp-block-group {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #FF6F27;
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 10000;
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
     padding-top: 100px;
+    overflow-y: auto;
 }
 
 .cyc-mobile-menu.is-open {
@@ -4522,29 +4966,6 @@ main.wp-block-group {
     padding: 32px;
 }
 
-.cyc-mobile-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 48px;
-    background-color: #434955;
-    color: #FF6F27;
-    font-family: var(--c-font-family-primary);
-    font-size: 20px;
-    font-weight: var(--c-font-weight-bold);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.cyc-mobile-cta:hover {
-    background-color: #ffffff;
-    color: #434955;
-    transform: scale(1.05);
-}
 
 .cyc-mobile-social {
     display: flex;
@@ -4591,7 +5012,16 @@ body:not(.home) main {
 
 /* Hero section should start right below the header */
 .c-hero {
-    margin-top: 82px;
+    margin-top: 90px;
+}
+
+/* Ajustar margen del header cuando está scrolled */
+.cyc-header.scrolled {
+    padding: 0;
+}
+
+.cyc-header.scrolled .cyc-header-container {
+    padding: 10px 32px;
 }
 
 /* Responsive Design */
@@ -4599,15 +5029,24 @@ body:not(.home) main {
 /* Tablet */
 @media (max-width: 992px) {
     .cyc-header-container {
-        padding: 16px 24px;
-    }
-
-    .cyc-logo-slogan {
-        font-size: 18px;
-    }
-
-    .cyc-cta-button {
         padding: 10px 24px;
+    }
+    
+    /* Asegurar que navegación y social icons estén visibles en tablet */
+    .cyc-header-nav {
+        display: flex !important;
+        gap: 20px;
+    }
+    
+    .cyc-social-icons {
+        display: flex !important;
+    }
+    
+    .cyc-hamburger {
+        display: none !important;
+    }
+    
+    .cyc-nav-link {
         font-size: 14px;
     }
 
@@ -4623,7 +5062,7 @@ body:not(.home) main {
 
     /* Adjust hero margin for smaller header */
     .c-hero {
-        margin-top: 76px;
+        margin-top: 90px;
     }
 
     body:not(.home) .wp-site-blocks,
@@ -4637,26 +5076,57 @@ body:not(.home) main {
     .cyc-header-container {
         padding: 12px 16px;
         grid-template-columns: 1fr auto;
+        gap: 16px;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .cyc-footer-links {
+        gap: 1.2em;
+        flex-wrap: wrap;
+    }
+    
+    .cyc-footer-link {
+        font-size: 0.9em;
+    }
+    
+    .c-services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cyc-header-container {
+        box-sizing: border-box;
     }
 
     .cyc-logo-img {
-        height: 40px;
+        height: 50px;
+        max-width: 100%;
+        width: auto;
     }
 
-    .cyc-logo-slogan {
-        font-size: 16px;
-    }
-
-    /* Hide desktop CTA button and social icons */
-    .cyc-cta-button,
+    /* Ocultar navegación y redes sociales en móvil */
+    .cyc-header-nav,
     .cyc-social-icons {
         display: none;
     }
 
-    /* Show hamburger menu */
+    /* Mostrar hamburger menu solo en móviles */
     .cyc-hamburger {
         display: flex;
-        grid-column: 2;
+        grid-column: 3;
+        justify-self: end;
+        flex-shrink: 0;
+    }
+
+    /* Ensure logo doesn't overflow */
+    .cyc-header-logo {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .cyc-logo-link {
+        min-width: 0;
+        max-width: 100%;
     }
 
     /* Adjust hero margin for mobile header */
@@ -4673,20 +5143,23 @@ body:not(.home) main {
 /* Small Mobile */
 @media (max-width: 480px) {
     .cyc-header-container {
-        padding: 10px 12px;
+        padding: 8px 12px;
+        gap: 12px;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .cyc-logo-img {
-        height: 35px;
-    }
-
-    .cyc-logo-slogan {
-        font-size: 14px;
+        height: 45px;
+        max-width: 100%;
+        width: auto;
     }
 
     .cyc-hamburger {
         width: 26px;
         height: 20px;
+        flex-shrink: 0;
     }
 
     .cyc-hamburger-line {
@@ -4701,6 +5174,12 @@ body:not(.home) main {
     .cyc-mobile-social .cyc-social-link {
         font-size: 16px;
         padding: 10px 20px;
+    }
+
+    /* Ensure logo section doesn't take too much space */
+    .cyc-header-logo {
+        min-width: 0;
+        max-width: calc(100% - 50px);
     }
 
     /* Adjust hero margin for small mobile header */
